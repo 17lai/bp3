@@ -4,8 +4,8 @@
      */ 
     function message(text,type){
         let text_class = "";
+        type = type || "default";
         switch(type){
-            
         case "default":
             text_class = "fa fa-comments";
             break;

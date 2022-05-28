@@ -1,0 +1,239 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>{#$app_name#} | {#$app_subtitle#}</title>
+    <meta name="description"
+          content="{#$app_description#}"/>
+    <meta name="keywords"
+          content="{#$app_keywords#}"/>
+
+    <link href="{#$base_url|cat:'/favicon.ico'#}" rel="shortcut icon"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="{#$base_url|cat:'/css/bootstrap.min.css'#}" rel="stylesheet">
+    <link href="{#$base_url|cat:'/css/bootstrap-dialog.min.css'#}" rel="stylesheet">
+    <script src="{#$base_url|cat:'/js/jquery.min.js'#}"></script>
+    <script src="{#$base_url|cat:'/js/bootstrap.min.js'#}"></script>
+    <link href="{#$base_url|cat:'/./fonts/font-awesome-4.7.0/css/font-awesome.min.css'#}" rel="stylesheet"/>
+    <script src="{#$base_url|cat:'/js/clipboard.min.js'#}"></script>
+    <script src="{#$base_url|cat:'/js/functions.js'#}"></script>
+    <script src="{#$base_url|cat:'/js/bootstrap-dialog.min.js'#}"></script>
+</head>
+<body style="background-color:rgb(231,231,231);">
+
+<header>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                        data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="./">{#$app_name#}</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="./">首页<i class="fa fa-home"></i></a></li>
+                </ul>
+                <form class="navbar-form navbar-left" action="./">
+                    <div class="form-group">
+                        <input type="text" name="s" required="required" class="form-control" placeholder="搜索文件">
+                    </div>
+                    <button type="submit" class="btn btn-default">搜索</button>
+                </form>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="{#$base_url|cat:'/login.php'#}">{#$action#}<i class="fa fa-user-circle-o"
+                                                                               aria-hidden="true"></i></a></li>
+                    <li><a href="{#$app_blog#}">官博<i class="fa fa-rss"></i></a></li>
+                    <li><a href="{#$app_github#}">github<i class="fa fa-github" aria-hidden="true"></i></a></li>
+                    <li><a href="{#$base_url|cat:'/user/login.php'#}">免部署版<i class="fa fa-info-circle"
+                                                                             aria-hidden="true"></i></a></li>
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
+    <div id="myheader" class="container-fluid">
+        <div class="container jumbotron">
+            <div class="row">
+                <p class="text-center">{#$app_name#} - {#$app_subtitle#}</p>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <ol class="breadcrumb">
+                        <li><a href='./'>Home</a></li>
+                        {#foreach from=$nav key=k item=v#}
+                            <li><a href='?dir={#$v["enc"]#}'>{#$v["name"]#}</a></li>
+                        {#/foreach#}
+                    </ol>
+                </div>
+            </div>
+            <form>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="search-wraper" role="search">
+                            <div class="input-group">
+                                <input type="text" name="s" class="form-control"
+                                       placeholder="{#if $key#}正在搜索：{#$key#}{#else#}搜索文件{#/if#}"
+                                       required="required">
+                                <span class="input-group-btn">
+                            <button class="btn btn-default" type="submit">Go!</button>
+                          </span>
+                            </div><!-- /input-group -->
+                        </div>
+                    </div><!--col-xs-12-->
+                </div><!--row-->
+            </form>
+        </div>
+    </div>
+    </div>
+</header>
+<main>
+    <div class="container">
+        <table class="table table-bordered table-responsive">
+            {#if $data['list']==null #}
+            这儿似乎什么也没有...
+            {#else#}
+            <thead class='active'>
+            <tr>
+                <th>文件<i class='glyphicon glyphicon-chevron-down'></i></th>
+                <th>大小<i class='glyphicon glyphicon-chevron-down'></i></th>
+                <th>下载<i class='glyphicon glyphicon-chevron-down'></i></th>
+            </tr>
+            </thead>
+            <tbody>
+            {#foreach from=$data['list'] key=k item=v#}
+            <tr>
+                {#if $v['isdir']==1 #}
+                <th scope="row">
+                    <i class="glyphicon glyphicon-folder-open"></i>
+                </th>
+                <td class="info" colspan="3"><a href="?dir={#$v['encode_path']#}" style="display:block">{#$v['server_filename']#}</a>
+                </td>
+                {#else#}
+                <th scope="row">
+                    <i class="glyphicon glyphicon-file"></i>
+                </th>
+                <td>{#$v['server_filename']#}{#if $key#} <span tip="{#$v['title']#}" class="tip fa fa-question-circle-o"></span>{#/if#}</td>
+                <td>{#$v['show_size']#}</td>
+                <td>
+                    <div class="btn {#if $isMobile#}btn-group-vertical{#else#}btn-group{#/if#}">
+                        <a class="btn btn-default" href="{#$base_url#}/dn.php?fsid={#$v['fs_id']#}">下载</a>
+                        <button class="btn btn-default cp" data-clipboard-text="{#$base_url#}/dn.php?fsid={#$v['fs_id']#}">复制</button>
+                        <a class="btn btn-default" href="{#$base_url#}/admin/dlink.php?fsid={#$v['fs_id']#}">直链</a>
+                        <button class="btn btn-default cp" data-clipboard-text="{#$base_url#}/admin/dlink.php?fsid={#$v['fs_id']#}">复制</button>
+                    </div>
+                </td>
+                {#/if#}
+            </tr>
+            {#/foreach#}
+            {#/if#}
+        </table>
+    </div>
+</main>
+<footer class="copyright">
+    <div class="navbar navbar-default navbar-inverse">
+        <p class="text-center" style="color:#9d9d9d;margin-top:15px;">Copyright © {#$app_name#} {#$year#}</p>
+    </div>
+</footer>
+<a href="javascript:(function(){window.scrollTo(0, 0);})();" title="返回顶部" id="back-to-top"
+   style="display:none;position:fixed;right:10px;bottom:10px;background-color:rgb(95,99,104);box-sizing: border-box;cursor:pointer;text-align:center;"><i
+        class="fa fa-angle-up"
+        style="height:40px;width:40px;display:inline-block;line-height:40px;color:#fff;"></i></a>
+<style>
+    .br {
+        word-break: break-all;
+    }
+
+    .jumbotron {
+        margin-bottom: 0px;
+    }
+
+    main {
+        margin-bottom: 20px;
+    }
+
+    .copyright, .navbar-inverse {
+        margin-bottom: 0px;
+    }
+
+    .tip {
+        cursor: pointer;
+    }
+</style>
+<script>
+    $(function () {
+        if ($(window).height() == $(document).height()) {
+            $(".copyright").addClass("navbar-fixed-bottom");
+        } else {
+            $(".copyright").removeClass(" navbar-fixed-bottom");
+        }
+        if (document.body.clientWidth < 768) {
+            $(".m-btns").addClass("btn-group-vertical");
+        }
+    });
+    var btns = document.querySelectorAll('.cp');
+    var clipboard = new ClipboardJS(btns);
+    clipboard.on('success', function (e) {
+        BootstrapDialog.show({
+            title: '消息',
+            message: '链接复制成功',
+            closable: true,
+            closeByBackdrop: false,
+            closeByKeyboard: false,
+            buttons: [{
+                label: '关闭消息',
+                action: function(dialogRef){
+                    dialogRef.close();
+                }
+            }]
+        });
+    });
+    clipboard.on('error', function (e) {
+        BootstrapDialog.show({
+            title: '消息',
+            message: '链接复制失败',
+            closable: true,
+            closeByBackdrop: false,
+            closeByKeyboard: false,
+            buttons: [{
+                label: '关闭消息',
+                action: function(dialogRef){
+                    dialogRef.close();
+                }
+            }]
+        });
+    });
+    $(window).scroll(function () {
+        let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+        if (scrollTop > 50) {
+            $("#back-to-top").css("display", "block");
+        } else {
+            $("#back-to-top").css("display", "none");
+        }
+    });
+    // 提示完整目录
+    $(".tip").click(function () {
+
+        BootstrapDialog.show({
+            title: '文件位置',
+            message: $(this).attr("tip"),
+            closable: true,
+            closeByBackdrop: false,
+            closeByKeyboard: false,
+            buttons: [{
+                label: '关闭消息',
+                action: function(dialogRef){
+                    dialogRef.close();
+                }
+            }]
+        });
+    });
+</script>
+</body>
+</html>

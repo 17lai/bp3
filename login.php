@@ -46,7 +46,6 @@
             js_alert('用户名或密码错误！');
         }
     }
-
     $bp3_tag->assign("login_baidu_url",$login_baidu_url);
 
     display();

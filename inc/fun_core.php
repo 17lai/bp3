@@ -87,7 +87,7 @@
      * 获取当前页面的Url绝对地址
      */
     function get_page_url(){
-        return get_site_url().$_SERVER['REQUEST_URI'];
+        return get_site_url().$_SERVER['PHP_SELF'];
     }
 
     /** 6
@@ -618,6 +618,8 @@
             $tpl = getTemplate();
             $bp3_tag->assign("dir_url",$dir_url);
             $bp3_tag->assign("base_url",$base_url);
+            $bp3_tag->assign("isMobile",isMobile());
+            $bp3_tag->force_compile = true; // 默认不缓存
             if($tpl!="" && file_exists(BP3_TEMPLATE_DIR.$tpl)){
                 $bp3_tag->display($tpl);
             }
@@ -627,4 +629,17 @@
             // 不做任何处理
         }
     }
+    /** 38
+     * 判断是否为手机端
+     * @return bool
+     */
+    function isMobile(){
+        $useragent = strtolower($_SERVER['HTTP_USER_AGENT']);
+        if (preg_match("/iphone|ios|android|mini|mobile|mobi|Nokia|Symbian|iPod|iPad|Windows\s+Phone|MQQBrowser|wp7|wp8|UCBrowser7|UCWEB|360\s+Aphone\s+Browser|AppleWebKit/", $useragent)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 

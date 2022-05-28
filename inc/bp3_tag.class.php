@@ -1,6 +1,6 @@
 <?php
 
-require('Smarty.class.php');
+require('smarty/Smarty.class.php');
 
 class bp3_tag extends Smarty {
 
@@ -20,7 +20,6 @@ class bp3_tag extends Smarty {
         $this->setCompileDir(BP3_TAG_TEMP.'/templates_c/');
         $this->setConfigDir(BP3_TAG_TEMP.'/configs/');
         $this->setCacheDir(BP3_TAG_TEMP.'/cache/');
-
         $this->caching = Smarty::CACHING_LIFETIME_CURRENT;
     }
 

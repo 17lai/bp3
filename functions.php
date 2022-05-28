@@ -204,7 +204,7 @@
 
 
     // 引入模板
-    require_once("inc/smarty/bp3_tag.class.php");
+    require_once("inc/bp3_tag.class.php");
     define("THEME","default");  // 当前主题
     $bp3_tag = new bp3_tag();
 

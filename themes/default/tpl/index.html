@@ -101,6 +101,7 @@
             {#else#}
             <thead class='active'>
             <tr>
+                <th></th>
                 <th>文件<i class='glyphicon glyphicon-chevron-down'></i></th>
                 <th>大小<i class='glyphicon glyphicon-chevron-down'></i></th>
                 <th>下载<i class='glyphicon glyphicon-chevron-down'></i></th>
@@ -123,10 +124,17 @@
                 <td>{#$v['show_size']#}</td>
                 <td>
                     <div class="btn {#if $isMobile#}btn-group-vertical{#else#}btn-group{#/if#}">
-                        <a class="btn btn-default" href="{#$base_url#}/dn.php?fsid={#$v['fs_id']#}">下载</a>
-                        <button class="btn btn-default cp" data-clipboard-text="{#$base_url#}/dn.php?fsid={#$v['fs_id']#}">复制</button>
-                        <a class="btn btn-default" href="{#$base_url#}/admin/dlink.php?fsid={#$v['fs_id']#}">直链</a>
-                        <button class="btn btn-default cp" data-clipboard-text="{#$base_url#}/admin/dlink.php?fsid={#$v['fs_id']#}">复制</button>
+                        {#if $check_login || !$close_dload#}
+                            <a class="btn btn-default" href="{#$base_url#}/dn.php?fsid={#$v['fs_id']#}">下载</a>
+                            <button class="btn btn-default cp" data-clipboard-text="{#$base_url#}/dn.php?fsid={#$v['fs_id']#}">复制</button>
+                        {#/if#}
+                        {#if $check_login || !$close_dlink#}
+                            <a class="btn btn-default" href="{#$base_url#}/admin/dlink.php?fsid={#$v['fs_id']#}">直链</a>
+                            <button class="btn btn-default cp" data-clipboard-text="{#$base_url#}/admin/dlink.php?fsid={#$v['fs_id']#}">复制</button>
+                        {#/if#}
+                        {#if !$check_login && $close_dload && $close_dlink#}
+                            无权限
+                        {#/if#}
                     </div>
                 </td>
                 {#/if#}
@@ -142,11 +150,11 @@
     </div>
 </footer>
 <a href="javascript:(function(){window.scrollTo(0, 0);})();" title="返回顶部" id="back-to-top"
-   style="display:none;position:fixed;right:10px;bottom:10px;background-color:rgb(95,99,104);box-sizing: border-box;cursor:pointer;text-align:center;"><i
+   style="display:none;position:fixed;{#if $isMobile#}left:20px;{#else#}right:20px;{#/if#}bottom:10px;background-color:rgb(95,99,104);box-sizing: border-box;cursor:pointer;text-align:center;"><i
         class="fa fa-angle-up"
         style="height:40px;width:40px;display:inline-block;line-height:40px;color:#fff;"></i></a>
 <style>
-    .br {
+    td {
         word-break: break-all;
     }
 
@@ -172,9 +180,6 @@
             $(".copyright").addClass("navbar-fixed-bottom");
         } else {
             $(".copyright").removeClass(" navbar-fixed-bottom");
-        }
-        if (document.body.clientWidth < 768) {
-            $(".m-btns").addClass("btn-group-vertical");
         }
     });
     var btns = document.querySelectorAll('.cp');

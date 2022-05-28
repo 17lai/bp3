@@ -77,6 +77,9 @@
     }
 //    easy_dump($nav);
 
+    $bp3_tag->assign("check_login",$check_login);
+    $bp3_tag->assign("close_dload",$close_dload);
+    $bp3_tag->assign("close_dlink",$close_dlink);
     $bp3_tag->assign("data",$data);
 
     display();

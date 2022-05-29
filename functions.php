@@ -128,70 +128,70 @@
     $config = get_config();
 
     //版本
-    $version = isset($config['version'])? $config['version'] : $base['version'];
+    $version = $config['version'] ?? $base['version'];
 
     //用户信息
-    $lock   = isset($config['user'])? $config['user']['lock']   : $base['user']['lock'];
-    $chance = isset($config['user'])? $config['user']['chance'] : $base['user']['chance'];
-    $name   = isset($config['user'])? $config['user']['name']   : $base['user']['name'];
-    $pwd    = isset($config['user'])? $config['user']['pwd']    : $base['user']['pwd'];
+    $lock   = $config['user']['lock'] ?? $base['user']['lock'];
+    $chance = $config['user']['chance'] ?? $base['user']['chance'];
+    $name   = $config['user']['name'] ?? $base['user']['name'];
+    $pwd    = $config['user']['pwd']  ??  $base['user']['pwd'];
     //站点信息
-    $title          = isset($config['site'])? $config['site']['title']      : $base['site']['title'];
-    $subtitle       = isset($config['site'])? $config['site']['subtitle']   : $base['site']['subtitle'];
-    $blog           = isset($config['site'])? $config['site']['blog']       : $base['site']['blog'];
-    $github         = isset($config['site'])? $config['site']['github']     : $base['site']['github'];
-    $description    = isset($config['site'])? $config['site']['description']: $base['site']['description'];
-    $keywords       = isset($config['site'])? $config['site']['keywords']   : $base['site']['keywords'];
+    $title          = $config['site']['title'] ?? $base['site']['title'];
+    $subtitle       = $config['site']['subtitle'] ?? $base['site']['subtitle'];
+    $blog           = $config['site']['blog'] ?? $base['site']['blog'];
+    $github         = $config['site']['github'] ?? $base['site']['github'];
+    $description    = $config['site']['description'] ?? $base['site']['description'];
+    $keywords       = $config['site']['keywords'] ?? $base['site']['keywords'];
     //权限控制信息
-    $pre_dir        = isset($config['control'])? $config['control']['pre_dir']     : $base['control']['pre_dir'];
-    $close_dlink    = isset($config['control'])? $config['control']['close_dlink'] : $base['control']['close_dlink'];
-    $close_dload    = isset($config['control'])? $config['control']['close_dload'] : $base['control']['close_dload'];
-    $open_grant     = isset($config['control'])? $config['control']['open_grant']  : $base['control']['open_grant'];
-    $open_grant2    = isset($config['control'])? $config['control']['open_grant2'] : $base['control']['open_grant2'];
-    $open_session   = isset($config['control'])? $config['control']['open_session']: $base['control']['open_session'];
-    $grant_type     = isset($config['control'])? $config['control']['grant_type']  : $base['control']['grant_type'];
-    $update_type    = isset($config['control'])? $config['control']['update_type'] : $base['control']['update_type'];
-    $update_url     = isset($config['control'])? $config['control']['update_url']  : $base['control']['update_url'];
-    $dn_limit       = isset($config['control'])? $config['control']['dn_limit']    : $base['control']['dn_limit'];
-    $dn_speed       = isset($config['control'])? $config['control']['dn_speed']    : $base['control']['dn_speed'];
-    $theme          = isset($config['control'])? $config['control']['theme']       : $base['control']['theme'];
+    $pre_dir        = $config['control']['pre_dir'] ?? $base['control']['pre_dir'];
+    $close_dlink    = $config['control']['close_dlink'] ?? $base['control']['close_dlink'];
+    $close_dload    = $config['control']['close_dload'] ?? $base['control']['close_dload'];
+    $open_grant     = $config['control']['open_grant']  ?? $base['control']['open_grant'];
+    $open_grant2    = $config['control']['open_grant2'] ?? $base['control']['open_grant2'];
+    $open_session   = $config['control']['open_session'] ?? $base['control']['open_session'];
+    $grant_type     = $config['control']['grant_type'] ?? $base['control']['grant_type'];
+    $update_type    = $config['control']['update_type'] ?? $base['control']['update_type'];
+    $update_url     = $config['control']['update_url']  ?? $base['control']['update_url'];
+    $dn_limit       = $config['control']['dn_limit']  ?? $base['control']['dn_limit'];
+    $dn_speed       = $config['control']['dn_speed']  ?? $base['control']['dn_speed'];
+    $theme          = $config['control']['theme']  ?? $base['control']['theme'];
 
     //内置信息, inner
-    $inner_app_key      = isset($config['inner'])? $config['inner']['app_id']       : $base['inner']['app_id'];
-    $inner_secret_key   = isset($config['inner'])? $config['inner']['secret_key']   : $base['inner']['secret_key'];
-    $inner_redirect_uri = isset($config['inner'])? $config['inner']['redirect_uri'] : $base['inner']['redirect_uri'];
+    $inner_app_key      = $config['inner']['app_id']   ?? $base['inner']['app_id'];
+    $inner_secret_key   = $config['inner']['secret_key']   ?? $base['inner']['secret_key'];
+    $inner_redirect_uri = $config['inner']['redirect_uri'] ?? $base['inner']['redirect_uri'];
 
     //免app信息，connect
-    $app_key        = isset($config['connect'])? $config['connect']['app_id'] : "";
-    $secret_key     = isset($config['connect'])? $config['connect']['secret_key'] : "";
-    $redirect_uri   = isset($config['connect'])? $config['connect']['redirect_uri'] : "";
+    $app_key        = $config['connect']['app_id'] ?? "";
+    $secret_key     = $config['connect']['secret_key'] ?? "";
+    $redirect_uri   = $config['connect']['redirect_uri'] ?? "";
 
     //身份信息identify
     $access_token       = m_token_refresh(); // 同时自动检测有效期
-    $expires_in         = isset($config['identify'])? $config['identify']['expires_in'] : 0;
-    $refresh_token      = isset($config['identify'])? $config['identify']['refresh_token'] : "";
-    $session_secret     = isset($config['identify'])? $config['identify']['session_secret'] : "";
-    $session_key        = isset($config['identify'])? $config['identify']['session_key'] : "";
-    $scope              = isset($config['identify'])? $config['identify']['scope'] : "";
-    $grant_url          = isset($config['identify'])? $config['identify']['grant_url'] : "";
-    $refresh_url        = isset($config['identify'])? $config['identify']['refresh_url'] : "";
-    $conn_time          = isset($config['identify'])? $config['identify']['conn_time'] : 0;
+    $expires_in         = $config['identify']['expires_in'] ?? 0;
+    $refresh_token      = $config['identify']['refresh_token'] ?? "";
+    $session_secret     = $config['identify']['session_secret'] ?? "";
+    $session_key        = $config['identify']['session_key'] ?? "";
+    $scope              = $config['identify']['scope'] ?? "";
+    $grant_url          = $config['identify']['grant_url'] ?? "";
+    $refresh_url        = $config['identify']['refresh_url'] ?? "";
+    $conn_time          = $config['identify']['conn_time'] ?? 0;
 
     //basic，连接基础信息
-    $baidu_name   = isset($config['basic'])? $config['basic']['baidu_name']:"";
-    $netdisk_name = isset($config['basic'])? $config['basic']['netdisk_name']:"";
-    $uk           = isset($config['basic'])? $config['basic']['uk']:  -1;
-    $vip_type     = isset($config['basic'])? $config['basic']['vip_type']: -1;
+    $baidu_name   = $config['basic']['baidu_name']??"";
+    $netdisk_name = $config['basic']['netdisk_name']??"";
+    $uk           = $config['basic']['uk']??-1;
+    $vip_type     = $config['basic']['vip_type']??-1;
 
     //绑定的百度信息，account
-    $a_baidu_name   = isset($config['account'])? $config['account']['baidu_name']:"";
-    $a_netdisk_name = isset($config['account'])? $config['account']['netdisk_name']:"";
-    $a_uk           = isset($config['account'])? $config['account']['uk']:  -1;
-    $a_vip_type     = isset($config['account'])? $config['account']['vip_type']: -1;
+    $a_baidu_name   = $config['account']['baidu_name']??"";
+    $a_netdisk_name = $config['account']['netdisk_name']??"";
+    $a_uk           = $config['account']['uk']??  -1;
+    $a_vip_type     = $config['account']['vip_type']??-1;
 
     //自定义存储百度信息，baidu
-    $baidu_account      = isset($config['baidu'])? $config['baidu']['baidu_account']:  "";
-    $baidu_pwd          = isset($config['baidu'])? $config['baidu']['baidu_pwd']: "";
+    $baidu_account      = $config['baidu']['baidu_account']??  "";
+    $baidu_pwd          = $config['baidu']['baidu_pwd']?? "";
 
     /* -------------------  4.常用业务处理  --------------------*/
     // 编码后的connect地址
@@ -210,7 +210,6 @@
     $themes = lsThemes();
     define("THEME",$theme);  // 当前主题
     $bp3_tag = new bp3_tag();
-//    easy_dump($config['control']['theme']);
 
     $bp3_tag->assign('app_name', $title);
     $bp3_tag->assign("app_subtitle",$subtitle);

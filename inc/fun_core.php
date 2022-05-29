@@ -356,12 +356,12 @@
             global $config_path;
         }
         // 如果存在session缓存，直接取
-        if($_SESSION['config']){
+        if($_SESSION['config'] && $config_path!="/conf_base.php"){
             return $_SESSION['config'];
         }else{
             // 校验文件是否存在
             $file_path = get_base_root().$config_path;
-            $config = array();
+            $config = ['user'=>[],'site'=>[],'control'=>[],'inner'=>[],'identify'=>[],'connect'=>[],'baidu'=>[],'basic'=>[],'account'=>[]];
             if(file_exists($file_path)){
                 $config = require($file_path);
             }

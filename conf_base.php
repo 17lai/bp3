@@ -29,6 +29,7 @@
     'update_url' => 'http://bp3-plus.52dixiaowo.com/bp3-main.zip',
     'dn_limit' => 0,
     'dn_speed' => 10240,
+    'theme' => 'default',
   ),
   'inner'=>array(
     'app_id' => 'NtcmMLFqq4Vf0IKBlVIDFGXAqjuYpvWN',

@@ -1,10 +1,5 @@
 <?php 
     require_once("./functions.php");
-    
-    // 已登陆，重定向
-    if($check_login){
-        redirect($admin_url);
-    }
     // 校验是否配置百度登录
     $bind_baidu = false;
     if(isset($config) && isset($config['identify']) && isset($config['account'])){
@@ -46,6 +41,10 @@
             js_alert('用户名或密码错误！');
         }
     }
+    $bp3_tag->assign("check_login",$check_login);
+    $bp3_tag->assign("admin_url",$admin_url);
+
+
     $bp3_tag->assign("login_baidu_url",$login_baidu_url);
 
     display();

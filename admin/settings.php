@@ -296,6 +296,25 @@
 <!--            <td class="br">--><?php //echo $config['control']['dn_speed'];?><!--</td>-->
 <!--            <td><input type="number" name="s26" value="--><?php //echo $config['control']['dn_speed'];?><!--" class="form-control"/></td>-->
 <!--        </tr>-->
+        <tr>
+            <th scope="row">27</th>
+            <td>前台主题 <span class="tip fa fa-question-circle-o"  tip="前台主题设置"></span></td>
+            <td><input id="show_update_url" name="s27" class="form-control" disabled value="<?php echo(THEME);?>"/></td>
+            <td>
+                <select name="s27" class="form-control" style="width: auto">
+                    <?php
+                        foreach ($themes as $k=>$v){
+                            if($theme==$v){
+                                echo "<option name='$v' selected>$v</option>";
+                            }else{
+                                echo "<option name='$v'>$v</option>";
+                            }
+                        }
+                    ?>
+                    ?>
+                </select>
+            </td>
+        </tr>
       </tbody>
     </table>
   </div>

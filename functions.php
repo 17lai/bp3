@@ -154,6 +154,7 @@
     $update_url     = isset($config['control'])? $config['control']['update_url']  : $base['control']['update_url'];
     $dn_limit       = isset($config['control'])? $config['control']['dn_limit']    : $base['control']['dn_limit'];
     $dn_speed       = isset($config['control'])? $config['control']['dn_speed']    : $base['control']['dn_speed'];
+    $theme          = isset($config['control'])? $config['control']['theme']       : $base['control']['theme'];
 
     //内置信息, inner
     $inner_app_key      = isset($config['inner'])? $config['inner']['app_id']       : $base['inner']['app_id'];
@@ -205,8 +206,11 @@
 
     // 引入模板
     require_once("inc/bp3_tag.class.php");
-    define("THEME","default");  // 当前主题
+    define("THEME_DIR",get_base_root()."/themes"); // 主题目录
+    $themes = lsThemes();
+    define("THEME",$theme);  // 当前主题
     $bp3_tag = new bp3_tag();
+//    easy_dump($config['control']['theme']);
 
     $bp3_tag->assign('app_name', $title);
     $bp3_tag->assign("app_subtitle",$subtitle);

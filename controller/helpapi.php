@@ -118,6 +118,7 @@ elseif($method=="savesettings"){
     $config['control']['update_url'] = $_POST['s24u'];
 //    $config['control']['dn_limit'] = $_POST['s25'];
 //    $config['control']['dn_speed'] = $_POST['s26'];
+    $config['control']['theme'] = $_POST['s27'];
 //    if(!is_numeric($_POST['s26'])){
 //        $check = false;
 //    }

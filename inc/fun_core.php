@@ -209,18 +209,35 @@
      * @param string $dir 要列出的文件夹，可使用相对路径或绝对路径
      * @return array
      */
-    function ls_deep(string $dir){
+
+    /** 17
+     * 递归遍历列出文件（兼容win）
+     * @param string $dir 要列出的文件夹，可使用相对路径或绝对路径
+     * @param string $level 如果传递了数字，会指定多少遍历层数，从1开始
+     * @return array 如果是文件夹，则is_dir=1,且存在son属性，文件则is_dir=0
+     */
+    function ls_deep(string $dir,$level="max"){
         $files = array();
         if(@$handle = opendir($dir)) { //注意这里要加一个@，不然会有warning错误提示：）
             while(($file = readdir($handle)) !== false) {
-                if($file != ".." && $file != ".") { //排除根目录
+                if($file != ".." && $file != ".") { //排除当前目录和父级目录
                     if(is_dir($dir.DIRECTORY_SEPARATOR.$file)) { //如果是子文件夹，就进行递归
-                        $arr = ["is_dir"=>1,"name"=>$file,"son"=>ls_deep($dir.DIRECTORY_SEPARATOR.$file)];
-                        $files[] = $arr;
+                        if($level=="max"){  // 无限遍历
+                            $arr = ["is_dir"=>1,"name"=>$file,"son"=>ls_deep($dir.DIRECTORY_SEPARATOR.$file,"max")];
+                        }else{  // 必须是数字
+                            if(is_numeric($level)){
+                                // 判断当前级数还有下级
+                                if($level>1){
+                                    $arr = ["is_dir"=>1,"name"=>$file,"son"=>ls_deep($dir.DIRECTORY_SEPARATOR.$file,$level-1)];
+                                }else{ // 最后一级了
+                                    $arr = ["is_dir"=>1,"name"=>$file];
+                                }
+                            }
+                        }
                     } else { //文件
                         $arr = ["is_dir"=>0,"name"=>$file];
-                        $files[] = $arr;
                     }
+                    $files[] = $arr;
                 }
             }
             closedir($handle);
@@ -642,4 +659,14 @@
         }
     }
 
-
+    /** 39
+     * 获取主题列表
+     */
+    function lsThemes(){
+        $themes = ls_deep(THEME_DIR,1);
+        if(count($themes)<1){
+            build_err("前台主题丢失，无任何主题");
+        }else{
+            return array_column($themes,"name");
+        }
+    }

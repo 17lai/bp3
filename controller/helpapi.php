@@ -103,12 +103,12 @@ elseif($method=="savesettings"){
     $config['site']['github'] = $_POST['s11'];
     $config['baidu']['baidu_account'] = $_POST['s12'];
     $config['baidu']['baidu_pwd'] = $_POST['s13'];
-    $config['control']['close_dlink'] = $_POST['s14'];
-    $config['control']['close_dload'] = $_POST['s15'];
+    $config['control']['close_dlink'] = (int)$_POST['s14'];
+    $config['control']['close_dload'] = (int)$_POST['s15'];
     $config['control']['open_grant'] = $_POST['s16'];
     $config['identify']['grant_url'] = $_POST['s17'];
     $config['control']['grant_type'] = $_POST['s17s'];
-    $config['control']['open_grant2'] = $_POST['s18'];
+    $config['control']['open_grant2'] = (int)$_POST['s18'];
     $config['control']['open_session'] = $_POST['s19'];
     $config['site']['description'] = $_POST['s20'];
     $config['site']['keywords'] = $_POST['s21'];

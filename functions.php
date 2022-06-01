@@ -203,6 +203,7 @@
     // 快速绑定百度登录授权地址
     $bind_account_grant_url = "$grant_url?display=$enc_bind_account_url";
 
+    define("isAdmin",isAdmin());
 
     // 引入模板
     require_once("inc/bp3_tag.class.php");

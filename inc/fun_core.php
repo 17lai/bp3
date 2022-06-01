@@ -631,13 +631,21 @@
         global $dir_url;
         global $base_url;
         global $bp3_tag;
+        global $config;
+        global $base;
         try {
             $tpl = getTemplate();
             $bp3_tag->assign("dir_url",$dir_url);
             $bp3_tag->assign("base_url",$base_url);
             $bp3_tag->assign("isMobile",isMobile());
+            $bp3_tag->assign("config",$config);
+            $bp3_tag->assign("base",$base);
             $bp3_tag->force_compile = true; // 默认不缓存
-            if($tpl!="" && file_exists(BP3_TEMPLATE_DIR.$tpl)){
+            $real_tpl = BP3_TEMPLATE_DIR.$tpl;
+            if(isAdmin){
+                $real_tpl = BP3_ROOT.'/admin/template/'.$tpl;
+            }
+            if($tpl!="" && file_exists($real_tpl)){
                 $bp3_tag->display($tpl);
             }
         } catch (SmartyException $e) {
@@ -668,5 +676,20 @@
             build_err("前台主题丢失，无任何主题");
         }else{
             return array_column($themes,"name");
+        }
+    }
+
+    /** 40
+     * 判断当前是否为admin目录
+     */
+    function isAdmin(){
+        $page_url = get_page_url();  // 当前页面url
+        $page_url_length = strlen($page_url);  // 页面url长度
+        $base_url = get_base_url();  // 根目录url
+        $base_url_length = strlen($base_url); // 根目录url长度
+        if($page_url_length>$base_url_length+7 && substr($page_url,$base_url_length,7) == "/admin/"){  // 7 为 /admin/ 的长度
+            return true;
+        }else{
+            return false;
         }
     }

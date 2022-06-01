@@ -115,7 +115,7 @@
         </div><!-- table-example -->
         <div class="row">
             <div class="col-xs-12">
-                <h2>绑定登录账户 <a class="pointer" onclick="copy_basic()">复制上面</a> <a href="{#$bind_account_grant_url#}">快速绑定</a></h2>
+                <h2>绑定登录账户 <a class="pointer" onclick="copy_basic()">复制</a> <a class="pointer" onclick="bind()" url="{#$bind_account_grant_url#}">绑定</a></h2>
                 <p>为了系统安全，bp3账户如果连续错误3次将会被锁定，此时只能ftp编辑配置信息恢复</p>
                 <p>推荐您绑定一个百度登录账户，bp3账户被封禁时可使用此账户解锁，也可用于直接登录</p>
             </div>
@@ -219,6 +219,26 @@
                     dialogRef.close();
                 }
             }]
+        });
+    }
+    function bind() {
+        const url = $(event.target).attr("url");
+        BootstrapDialog.confirm({
+            title: '消息',
+            message: '使用一个百度账户在网页完成授权，bp3将绑定该账户用于登录',
+            closable: true, // <-- Default value is false
+            draggable: true, // <-- Default value is false
+            btnCancelLabel: '取消', // <-- Default value is 'Cancel',
+            btnOKLabel: '下一步', // <-- Default value is 'OK',
+            btnOKClass: 'btn-primary', // <-- If you didn't specify it, dialog type will be used,
+            callback: function(result) {
+                if(result) {
+                    // 确定
+                    window.location.href = url;
+                }else {
+                    // 取消
+                }
+            }
         });
     }
 </script>

@@ -97,12 +97,19 @@
     function baidu_login(){
 
         let login_url = "{#$login_baidu_url#}";
-        if(login_url){
-            location.href = login_url;
-        }else{
+        let err_grant = "{#$err_grant#}";
+        let errMsg = "";
+        if(!login_url){
+            errMsg =  "您还未配置百度账户，无法使用此功能";
+        }else if(err_grant==="grant"){
+            errMsg = "免app授权系统未开启";
+        }else if(err_grant==="grant2"){
+            errMsg = "内置app授权系统未开启";
+        }
+        if(errMsg){
             BootstrapDialog.show({
                 title: '消息',
-                message: '管理员，您还未配置百度账户，无法使用此功能',
+                message: "管理员："+errMsg,
                 closable: true,
                 closeByBackdrop: false,
                 closeByKeyboard: false,
@@ -113,6 +120,8 @@
                     }
                 }]
             });
+        }else{
+            location.href = login_url;
         }
     }
 </script>

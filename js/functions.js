@@ -42,10 +42,10 @@
     }
     
     /**
-     * 延迟后刷新页面，单位毫秒，默认1500
+     * 延迟后刷新页面，单位毫秒，默认500
      */ 
     function lazy_reload(time){
-        let def_time = 1500;
+        let def_time = 500;
         if(!time){
             time = def_time;
         }

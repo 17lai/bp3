@@ -212,6 +212,11 @@
     define("THEME",$theme);  // 当前主题
     $bp3_tag = new bp3_tag();
 
+    // 注册config
+    $bp3_tag->assign("config",$config);
+    // 注册base
+    $bp3_tag->assign("base",$base);
+    // 其他
     $bp3_tag->assign('app_name', $title);
     $bp3_tag->assign("app_subtitle",$subtitle);
     $bp3_tag->assign("app_blog",$blog);

@@ -693,3 +693,15 @@
             return false;
         }
     }
+
+    /** 41
+     * 判断系统的类型，如果不是win，则统一标识为linux
+     */
+    function os_type(){
+        $os_name=PHP_OS;
+        if(strpos($os_name,"WIN")!==false){
+            return "win";
+        }else{
+            return "linux";
+        }
+    }

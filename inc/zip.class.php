@@ -28,7 +28,7 @@ class ExtendedZip extends ZipArchive {
                 continue;
 
             // zip打包排除项
-            if($filename==".user.ini" || $filename==".git" || $filename==".idea" || $filename==".gitattributes" || $filename==".gitignore"){
+            if($filename==".user.ini" || $filename==".git" || $filename==".idea" || $filename==".gitattributes" || $filename==".gitignore" || $filename=="temp"){
                 continue;
             }
             // Proceed according to type

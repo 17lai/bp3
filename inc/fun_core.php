@@ -705,3 +705,38 @@
             return "linux";
         }
     }
+    /** 42
+     * 单线程下载文件，把服务器文件下载给浏览器
+     * @param string $filename 需要下载的本地文件地址，可相对或绝对地址
+     * @param bool $flock 是否读取锁定
+     */
+    function easy_read_file(string $filename,bool $flock=false){
+        $filename = realpath($filename);
+        // 计算文件大小
+        $file_size=filesize($filename);
+        // 直接下载
+        header("Content-type: application/octet-stream");
+        header("Content-Disposition: attachment; filename=".basename($filename));
+        header('Content-Length: ' . $file_size);
+        header('Content-Transfer-Encoding: binary');
+        $handle = fopen($filename,"rb");
+        $buffer = 1024;
+        $canRead = $file_size;  // 剩余可读取长度
+        if($flock){
+            flock($handle,LOCK_SH);  // 读取独占锁定
+        }
+        while($canRead >0 ){
+            // 剩余可读，小于buffer，把剩余可读取出来即可
+            if($canRead < $buffer){
+                echo fread($handle,$canRead);
+                // 剩余可读为0
+                $canRead = 0;
+            }else{
+                // 读取一部分
+                echo fread($handle,$buffer);
+                // 剩余可读减少一个buffer
+                $canRead -= $buffer;
+            }
+        }
+        fclose($handle);
+    }

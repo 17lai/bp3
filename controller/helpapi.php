@@ -61,28 +61,28 @@ elseif($method=="resetsys"){
 }
 // 整站导出压缩包
 elseif($method=="backup"){
-    // 备份缓存文件
-    $filename = "./bp3-main-back.zip";
 
-    // 删掉旧压缩包
-    if(file_exists($filename)){
-        unlink($filename);
+    // 是否排除config
+    $skip = $_GET['skip'];
+    // 指定缓存文件名
+    $filename = TEMP_DIR.DIRECTORY_SEPARATOR."bp3-main-back.zip";
+    $file_ctime = file_exists($filename)? filectime($filename) : 0;
+    if((time() - $file_ctime)>3){  // 判断文件创建时间，在极短时间内不会重复创建
+        // 整站备份，zip的子目录为bp3-main
+        if(empty($skip) && !file_exists($filename)){
+            ExtendedZip::zipTree(get_base_root(), $filename, ZipArchive::CREATE,"bp3-main");
+        }
+        elseif(!file_exists($filename)){
+            ExtendedZip::zipTree(get_base_root(), $filename, ZipArchive::CREATE,"bp3-main",["config.php"]);
+        }
+        // 文件已存在，则覆盖该文件
+        elseif(empty($skip)){
+            ExtendedZip::zipTree(get_base_root(), $filename, ZipArchive::OVERWRITE,"bp3-main");
+        }else{
+            ExtendedZip::zipTree(get_base_root(), $filename, ZipArchive::OVERWRITE,"bp3-main",["config.php"]);
+        }
     }
-
-    // 整站备份，子目录为bp3-main
-
-    ExtendedZip::zipTree(get_base_root(), $filename, ZipArchive::CREATE,"bp3-main");
-
-    // 开始下载
-    header("Cache-Control: public");
-    header("Content-Description: File Transfer");
-    header('Content-disposition: attachment; filename='.basename($filename)); //文件名
-    header("Content-Type: application/zip"); //zip格式的
-    header("Content-Transfer-Encoding: binary"); //告诉浏览器，这是二进制文件
-    header('Content-Length: '. filesize($filename)); //告诉浏览器，文件大小
-    @readfile($filename);  // 输出内容
-
-    // 删掉压缩包
+    easy_read_file($filename,true);
     unlink($filename);
 
 }

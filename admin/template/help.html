@@ -80,7 +80,7 @@
         </div>
 
         <h2>导入与导出</h2>
-        <p>如果你希望导入压缩包或配置文件，可 <input type="button" class="btn btn-primary" value="点击导入" onclick="$('#upload').trigger('click');"/>，导入压缩包程序会自动更新</p>
+        <p>如果你希望导入压缩包或配置文件，可 <input type="button" class="btn btn-primary" value="点击导入" onclick="emp()"/>，导入压缩包程序会自动更新</p>
         <p><b>导入格式：</b>导入代码时，该压缩包仅包含bp3-main文件夹，所有代码放在该文件夹下，github下载时默认该格式</p>
         <input id="upload_config" type="file" class="hidden" accept=".php"/>
         <p class="hidden"><input id="upload" type="file" class="hidden" accept=".zip"/></p>
@@ -360,6 +360,35 @@ print(resp.read().decode())</code></pre>
     }
 
     /**
+     * 导入
+     */
+    function emp(){
+        BootstrapDialog.show({
+            title: '消息',
+            message: '导入zip会更新整站，导入php会更新配置文件。',
+            closable: false,
+            buttons: [{
+                label: '导入zip',
+                cssClass: 'btn-success',
+                action: function(dialogRef){
+                    $('#upload').trigger('click');
+                }
+            }, {
+                label: '导入php',
+                cssClass: 'btn-primary',
+                action: function(dialogRef){
+                    $('#upload_config').trigger('click');
+                }
+            },{
+                label: '关闭',
+                action: function(dialogRef){
+                    dialogRef.close();
+                }
+            }]
+        });
+    }
+
+    /**
      * 检测更新
      */
     function check_update(){
@@ -405,31 +434,10 @@ print(resp.read().decode())</code></pre>
                         }]
                     });
                 }else{
-                    BootstrapDialog.show({
-                        title: "消息",
-                        message: '<p class="text-success">恭喜，当前已是最新版本。</p>',
-                        buttons: [{
-                            label: '关闭',
-                            action: function(dialogRef){
-                                dialogRef.close();
-                            }
-                        }]
-                    });
+                    BootstrapDialog.alert('<p class="text-success">恭喜，当前已是最新版本。</p>');
                 }
             }catch (e) {
-                BootstrapDialog.show({
-                    title: '消息',
-                    message: '无法获取更新信息',
-                    closable: true,
-                    closeByBackdrop: false,
-                    closeByKeyboard: false,
-                    buttons: [{
-                        label: '关闭消息',
-                        action: function(dialogRef){
-                            dialogRef.close();
-                        }
-                    }]
-                });
+                BootstrapDialog.alert('<p class="text-info">获取最新消息失败</p>');
             }
         });
     }
@@ -513,12 +521,13 @@ print(resp.read().decode())</code></pre>
                 if(this.responseText){
                     let jsonObj = JSON.parse(this.responseText);
                     if(jsonObj.errno==0){
-                        message("导入成功","success");
+                        BootstrapDialog.alert('<p class="text-success">导入成功</p>');
+                        lazy_reload();
                     }else{
-                        message("导入失败","error");
+                        BootstrapDialog.alert('<p class="text-danger">导入失败</p>');
                     }
                 }else{
-                    message("导入失败","error");
+                    BootstrapDialog.alert('<p class="text-danger">导入失败</p>');
                 }
             }
         }

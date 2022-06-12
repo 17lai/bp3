@@ -185,34 +185,10 @@
     var btns = document.querySelectorAll('.cp');
     var clipboard = new ClipboardJS(btns);
     clipboard.on('success', function (e) {
-        BootstrapDialog.show({
-            title: '消息',
-            message: '链接复制成功',
-            closable: true,
-            closeByBackdrop: false,
-            closeByKeyboard: false,
-            buttons: [{
-                label: '关闭消息',
-                action: function(dialogRef){
-                    dialogRef.close();
-                }
-            }]
-        });
+        BootstrapDialog.alert("<p class='text-success'>链接复制成功</p>");
     });
     clipboard.on('error', function (e) {
-        BootstrapDialog.show({
-            title: '消息',
-            message: '链接复制失败',
-            closable: true,
-            closeByBackdrop: false,
-            closeByKeyboard: false,
-            buttons: [{
-                label: '关闭消息',
-                action: function(dialogRef){
-                    dialogRef.close();
-                }
-            }]
-        });
+        BootstrapDialog.alert("<p class='text-danger'>链接复制失败</p>");
     });
     $(window).scroll(function () {
         let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;

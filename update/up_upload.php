@@ -6,9 +6,11 @@
     
     
     // 保存上传的文件
-    $temp_uri = "./bp3-main.zip";
+    $temp_uri = TEMP_DIR.DIRECTORY_SEPARATOR."bp3-main.zip";
     move_uploaded_file($_FILES["file"]["tmp_name"],$temp_uri);
-    
-    // 调用自动更新核心代码
-    
-    require("./up_core.php");
+
+    // 调用自动更新代码
+    $type = os_type();
+
+    require("./up_core_$type.php");
+

@@ -1,61 +1,62 @@
 <?php
 
+// windows 系统上的更新
+
 require_once("../functions.php");
 
 force_login();
 
-$lock_file = "up_lock.php";  // 版本更新锁定文件
+$lock_file = TEMP_DIR.DIRECTORY_SEPARATOR."up_lock.php";  // 版本更新锁定文件
 
 // 指定一个临时目录
-$temp_dir = __DIR__.DIRECTORY_SEPARATOR."temp";
+$temp_dir = TEMP_DIR.DIRECTORY_SEPARATOR."update";  // 用于解压源码的临时文件夹
 
 // 把zip解压
 $zip = new \ZipArchive;
+if(empty($temp_uri)){
+    build_err("缺少源码zip文件");
+}
 $zip->open($temp_uri, \ZipArchive::CREATE);  // 指定$temp_uri是上传的压缩包名
 $zip->extractTo($temp_dir);
 $zip->close();
 
-
 // 简单判断上传的文件是否合法
 $check_dir = $temp_dir.DIRECTORY_SEPARATOR."bp3-main";
-if(!is_dir($check_dir)){
+if(!is_dir($check_dir)){  // 不存在bp3-main文件夹
 
-    echo "请从github下载bp3代码，现在上传的不是bp3代码";
     del_dir($temp_dir);
+    unlink($temp_uri);
+    build_err("请从github下载bp3代码，现在上传的不是bp3代码");
 
 }else{
 
     if(file_exists($lock_file)){
 
-        echo "更新失败，已经存在另一个正在执行的升级任务";
+        build_err("更新失败，已经存在另一个正在执行的升级任务");
 
     }else{
         file_put_contents($lock_file,"1");  // 升级锁定
 
-        // echo "后台更新中，请勿乱动，过几秒后刷新即可（版本号变化）";
-
         // 开始进行文件覆盖
-        $arr = ls_deep($check_dir);
+        $arr = ls_deep($check_dir,1);
 
         // 遍历第一层，注意update文件夹与config.php特殊处理
         foreach($arr as $key=>$value)
         {
             if($value['is_dir']==1){
                 // 说明是文件夹
-
-                // 从原文件夹 temp/bp3-main/dir 到 ../dir 的所有文件全部覆盖
                 // 使用特定函数，递归复制一个目录下的文件
-                recurse_copy($check_dir.DIRECTORY_SEPARATOR.$value['name'],"../".$value['name']);
+                recurse_copy($check_dir.DIRECTORY_SEPARATOR.$value['name'],BP3_ROOT.DIRECTORY_SEPARATOR.$value['name']); // 从缓存目录覆盖到根目录
 
             }else{
                 // 是文件
-                if($value['name']=='conf_base.php'){
+                if($value['name']=='conf_base.php'){  // 处理base文件
 
                     if(file_exists($check_dir.DIRECTORY_SEPARATOR."config.php")){
                         // 如果导入了新的config，那么conf_base不进行特殊处理
                     }else{
                         // 基础配置文件，单独处理
-                        $base = require($check_dir.DIRECTORY_SEPARATOR."conf_base.php");
+                        $base = require($check_dir.DIRECTORY_SEPARATOR."conf_base.php");  // 以新的base文件为准
                         // 新增base中独立项，但不会覆盖config原有项
                         $config = arr2_merge($config,$base);
                         // 手动指定更新版本号
@@ -64,12 +65,12 @@ if(!is_dir($check_dir)){
                         save_config();
                     }
                     // 覆盖旧conf_base.php
-                    copy($check_dir.DIRECTORY_SEPARATOR."conf_base.php","../conf_base.php");
+                    copy($check_dir.DIRECTORY_SEPARATOR."conf_base.php",BP3_ROOT.DIRECTORY_SEPARATOR."conf_base.php"); // 从缓存目录覆盖到根目录
                 }else{
                     // 全部覆盖
-                    $src_name = $check_dir.DIRECTORY_SEPARATOR.$value['name'];
-                    $dest_name = "../".$value['name'];
-                    copy($src_name,$dest_name);
+                    $src_name = $check_dir.DIRECTORY_SEPARATOR.$value['name'];  // 缓存目录
+                    $dest_name = BP3_ROOT.DIRECTORY_SEPARATOR.$value['name'];  // 根目录
+                    copy($src_name,$dest_name);  // 从缓存目录覆盖到根目录
                 }
             }
         }
@@ -77,6 +78,6 @@ if(!is_dir($check_dir)){
         unlink($temp_uri);
         del_dir($temp_dir);
         unlink($lock_file);
-        echo "程序已更新完毕，可能看起来无变化，一般版本号会不同";
+        build_success("程序已更新完毕，可能看起来无变化，一般版本号会不同");
     }
 }

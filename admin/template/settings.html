@@ -513,6 +513,7 @@
                             dialogRef.getModalBody().html('<span class="text-success">保存成功</span>');
                             setTimeout(function () {
                                 dialogRef.close();
+                                lazy_reload();
                             }, 1000);
                         } else {
                             dialogRef.getModalBody().html('<span class="text-danger">保存失败</span>');

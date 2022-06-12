@@ -372,6 +372,7 @@ print(resp.read().decode())</code></pre>
                 cssClass: 'btn-success',
                 action: function(dialogRef){
                     $('#upload').trigger('click');
+                    dialogRef.close();
                 }
             }, {
                 label: '导入php',

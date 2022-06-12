@@ -66,6 +66,9 @@ elseif($method=="backup"){
     $skip = $_GET['skip'];
     // 指定缓存文件名
     $filename = TEMP_DIR.DIRECTORY_SEPARATOR."bp3-main-back.zip";
+    if($skip){
+        $filename = TEMP_DIR.DIRECTORY_SEPARATOR."bp3-main.zip";  // 源码名称，用于简单区分是否包含config
+    }
     $file_ctime = file_exists($filename)? filectime($filename) : 0;
     if((time() - $file_ctime)>3){  // 判断文件创建时间，在极短时间内不会重复创建
         // 整站备份，zip的子目录为bp3-main

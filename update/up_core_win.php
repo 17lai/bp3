@@ -50,20 +50,19 @@ if(!is_dir($check_dir)){  // 不存在bp3-main文件夹
 
             }else{
                 // 是文件
-                if($value['name']=='conf_base.php'){  // 处理base文件
+                if($value['name']=="config.php"){
+                    continue;  // 不再允许导入zip时更新config，因为比较危险，且没有意义，如需导入config，请单独导入
+                }
+                elseif($value['name']=='conf_base.php'){  // 处理base文件
 
-                    if(file_exists($check_dir.DIRECTORY_SEPARATOR."config.php")){
-                        // 如果导入了新的config，那么conf_base不进行特殊处理
-                    }else{
-                        // 基础配置文件，单独处理
-                        $base = require($check_dir.DIRECTORY_SEPARATOR."conf_base.php");  // 以新的base文件为准
-                        // 新增base中独立项，但不会覆盖config原有项
-                        $config = arr2_merge($config,$base);
-                        // 手动指定更新版本号
-                        $config['version'] = $base['version'];
-                        // 存储合并后的新配置文件
-                        save_config();
-                    }
+                    // 基础配置文件，单独处理
+                    $base = require($check_dir.DIRECTORY_SEPARATOR."conf_base.php");  // 以新的base文件为准
+                    // 新增base中独立项，但不会覆盖config原有项
+                    $config = arr2_merge($config,$base);
+                    // 手动指定更新版本号
+                    $config['version'] = $base['version'];
+                    // 存储合并后的新配置文件
+                    save_config();
                     // 覆盖旧conf_base.php
                     copy($check_dir.DIRECTORY_SEPARATOR."conf_base.php",BP3_ROOT.DIRECTORY_SEPARATOR."conf_base.php"); // 从缓存目录覆盖到根目录
                 }else{

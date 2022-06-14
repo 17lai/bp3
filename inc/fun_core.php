@@ -513,6 +513,7 @@
      * @param bool $die 是否停止解析，默认true
      */
     function build_err($msg=null,bool $die=true){
+        global $time;
         // 数组处理
         if(is_array($msg)){
             if(!isset($msg['errno'])){
@@ -521,15 +522,18 @@
             if(!isset($msg['errmsg'])){
                 $msg['errmsg'] = "fail";
             }
+            if(!isset($msg['time'])){
+                $msg['time'] = $time;
+            }
             echo json_encode($msg,JSON_UNESCAPED_UNICODE);
         }
         // 字符串处理
         elseif(is_string($msg)){
-            echo json_encode(array("errno"=>-1,"errmsg"=>$msg),JSON_UNESCAPED_UNICODE);
+            echo json_encode(array("errno"=>-1,"errmsg"=>$msg,'time'=>$time),JSON_UNESCAPED_UNICODE);
         }
         // 默认值
         elseif(empty($msg)){
-            echo json_encode(array("errno"=>-1,"errmsg"=>"fail"),JSON_UNESCAPED_UNICODE);
+            echo json_encode(array("errno"=>-1,"errmsg"=>"fail",'time'=>$time),JSON_UNESCAPED_UNICODE);
         }
         if($die){
             die;
@@ -574,12 +578,13 @@
      * @param array|string|null $msg
      */
     function build_success($msg=null){
+        global $time;
         $msg_arr = array();
         if(empty($msg)){
-            $msg_arr = ["errno"=>0,"errmsg"=>"success"];
+            $msg_arr = ["errno"=>0,"errmsg"=>"success",'time'=>$time];
         }
         elseif(is_string($msg)){
-            $msg_arr = ["errno"=>0,"errmsg"=>$msg];
+            $msg_arr = ["errno"=>0,"errmsg"=>$msg,'time'=>$time];
         }
         elseif(is_array($msg)){
             if(!isset($msg['errno'])){
@@ -587,6 +592,9 @@
             }
             if(!isset($msg['errmsg'])){
                 $msg['errmsg'] = "success";
+            }
+            if(!isset($msg['time'])){
+                $msg['time'] = $time;
             }
             $msg_arr = $msg;
         }

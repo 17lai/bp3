@@ -140,7 +140,9 @@ print(resp.read().decode())</code></pre>
 
         <h3>刷新缓存</h3>
         <p>从v1.5.6版本开始，bp3加入了session缓存以加速配置文件，配置文件的读取和保存更快了。</p>
-        <p>但随之而来的问题是，如果配置文件被其他方式修改了，从session读取的文件将会带来错误，可点击<button class="btn btn-primary" onclick="refresh_session()" style="text-indent: 0px">刷新缓存</button>以修复。</p>
+        <p>但随之而来的问题是，如果配置文件被其他方式修改了，从session读取的文件将会带来错误，可点击 <button class="btn btn-primary" onclick="refresh_session()" style="text-indent: 0px">刷新缓存</button> 以修复。</p>
+        <p>系统提供了一个外部刷新地址，例如账户被锁定，然后你去修改配置文件，但session读取的仍是原数据，这时请关闭浏览器再打开，或手动访问以下地址：</p>
+        <pre><code>{#$base_url|cat:'/controller/refresh_session.php'#}</code></pre>
 
         <h3>其他问题</h3>
         <p>可参阅文档：<a href="https://pan.baidu.com/union/doc/" target="_blank">百度网盘开发者官方文档</a>，或 <a href="https://www.52dixiaowo.com/post-3261.html" target="_blank">bp3简易使用手册</a></p>

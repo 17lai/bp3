@@ -125,7 +125,12 @@
     $base = get_config("/conf_base.php");
 
     //配置信息
-    $config = get_config();
+    $config = array();
+    if(defined("REFRESH_SESSION")){
+        $config = get_config("",true);
+    }else{
+        $config = get_config();
+    }
 
     //版本
     $version = $config['version'] ?? $base['version'];

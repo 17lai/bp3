@@ -347,16 +347,17 @@
 
     /** 21
      * 获取配置文件（默认获取用户配置文件）
-     * @param string $config_path
+     * @param string $config_path 配置文件的路径
+     * @param bool $force 是否强制从文件读取
      * @return mixed
      */
-    function get_config(string $config_path=""){
+    function get_config(string $config_path="",bool $force=false){
         // 默认使用$config_path全局变量
         if(empty($config_path)){
             global $config_path;
         }
         // 如果存在session缓存，直接取
-        if($_SESSION['config'] && $config_path!="/conf_base.php"){
+        if($_SESSION['config'] && $config_path!="/conf_base.php" && !$force){
             return $_SESSION['config'];
         }else{
             // 校验文件是否存在

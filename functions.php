@@ -167,7 +167,12 @@
     $redirect_uri   = $config['connect']['redirect_uri'] ?? "";
 
     //身份信息identify
-    $access_token       = m_token_refresh(); // 同时自动检测有效期
+    $access_token = "";
+    if(defined('TOKEN_REFRESH')){  // 如果在引入前，定义了常量 TOKEN_REFRESH，则强制刷新
+        $access_token = m_token_refresh(null,true);
+    }else{
+        $access_token       = m_token_refresh(); // 同时自动检测有效期
+    }
     $expires_in         = $config['identify']['expires_in'] ?? 0;
     $refresh_token      = $config['identify']['refresh_token'] ?? "";
     $session_secret     = $config['identify']['session_secret'] ?? "";

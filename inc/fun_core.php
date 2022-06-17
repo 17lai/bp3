@@ -9,7 +9,8 @@
      * @param int $byte 字节
      * @return string $h_str 高可用大小字符串
      */
-    function height_show_size(int $byte){
+    function height_show_size($byte){
+        $byte = (int)$byte;
         $h_str = '';
         if($byte<1024){
             $h_str = $byte.'B';

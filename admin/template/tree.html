@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>资源树 | bp3</title>
+    <style>
+        p{
+            margin: 0;
+            word-break: break-all;
+        }
+        .h2{
+            font-size: 2em;
+            font-weight: bold;
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+        .h4{
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+<p>本次记录数：{#$record#}，{#if $has_more#}<span style="color: red">本次加载还有更多数据</span>{#else#}<span style="color: green">已全部加载</span>{#/if#}，最深层级：{#$max_dir#}</p>
+    <hr>
+    <p class="h2">资源生成树展示：{#$lastPath#} [ {#$all_size|height_show_size#} ]</p>
+    {#foreach from=$data key=k item=v#}
+        {#if $k==$base_dir#}
+            {#if $v['list']#}
+                {#foreach from=$v['list'] key=k2 item=v2#}
+                    <p>┣━  {#$k2#} <b>[ {#$v2|height_show_size#} ]</b> </p>
+                {#/foreach#}
+            {#/if#}
+        {#else#}
+                <p class="h4">{#'┃ '|str_repeat:($v['deep']-2)#}┣━ {#$v['name']#} <b>[ {#$v['size']|height_show_size#} ]</b></p>
+            {#if $v['list']#}
+                {#foreach from=$v['list'] key=k2 item=v2#}
+                <p>{#'┃ '|str_repeat:($v['deep']-1)#}┣━  {#$k2#} <b>[ {#$v2|height_show_size#} ]</b> </p>
+                {#/foreach#}
+            {#/if#}
+        {#/if#}
+    {#/foreach#}
+    <br>
+</body>
+</html>

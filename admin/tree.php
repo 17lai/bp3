@@ -4,8 +4,8 @@
     force_login();  // 强制登录
 
     $base_dir = force_get_param("base_dir");
-    // 一次至多查找4000条
-    $limit = 4000;
+    // 一次至多查找10000条
+    $limit = 10000;
 
     // 最大目录层级3层（仅在数据量超过限定数量时，此限制生效，如果数量在可控范围内则无效）
     $limit_deep = 3;

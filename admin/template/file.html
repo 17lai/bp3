@@ -1,0 +1,374 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>文件管理 | bp3</title>
+    <link href="../favicon.ico" rel="shortcut icon" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="{#$base_url|cat:'/css/bootstrap-dialog.min.css'#}" rel="stylesheet">
+    <script src="../js/jquery.min.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+    <link href="../fonts/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
+    <script src="{#$base_url|cat:'/js/functions.js'#}"></script>
+    <script src="{#$base_url|cat:'/js/bootstrap-dialog.min.js'#}"></script>
+    <!--<script src="../js/spark-md5.js"></script>-->
+</head>
+<body style="background-color:rgb(231,231,231);">
+
+<header >
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="./">管理系统</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                </ul>
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="./file.php">文件管理<i class="fa fa-th-large" aria-hidden="true"></i><span class="sr-only">(current)</span></a></li>
+                    <li><a href="./settings.php">修改设置<i class="fa fa-cog"></i></a></li>
+                    <li><a href="./help.php">帮助与支持<i class="fa fa-question-circle" aria-hidden="true"></i></a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="../">前台<i class="fa fa-home"></i></a></li>
+                    <li><a href="./logout.php">注销<i class="fa fa-sign-out" aria-hidden="true"></i></i></a></li>
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
+    <div id="myheader" class="container-fluid">
+        <div class="container jumbotron" style="margin-bottom: 0px;">
+            <div class="row">
+                <div class="col-xs-12" style="margin-bottom: 10px;">
+                <div class="btn-group">
+                    {#if $dir#}
+                    <a target="_blank" href="https://pan.baidu.com/disk/main?from=homeFlow#/index?category=all&path={#$dir|urlencode#}" class="btn btn-default btn-sm">百度目录</a>
+                    <button class="btn btn-default btn-sm" onclick="mkdir()">新文件夹</button>
+                    {#elseif $key#}
+                    <a target="_blank" href="https://pan.baidu.com/disk/main/#/index?category=all&search={#$key|urlencode#}" class="btn btn-default btn-sm">百度搜索</a>
+                    {#/if#}
+                </div>
+                <div class="btn-group pull-right">
+                    {#if $dir!=$config['control']['pre_dir']#}
+                        <a class="btn btn-default btn-sm" href="./file.php?dir={#$config['control']['pre_dir']|urlencode#}">前台目录</a>
+                    {#/if#}
+                    <a class="btn btn-default btn-sm" id="rename">重命名</a>
+                    <a class="btn btn-default btn-sm" id="delete">删除</a>
+                </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <ol class="breadcrumb">
+                        <li><a href='./file.php'>Home</a></li>
+                        {#foreach from=$nav key=k item=v#}
+                        <li><a href='?dir={#$v["enc"]#}'>{#$v["name"]#}</a></li>
+                        {#/foreach#}
+                    </ol>
+                </div>
+            </div>
+            <form>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="search-wraper" role="search">
+                            <div class="input-group">
+                                <input type="text" name="s" class="form-control"
+                                       placeholder="{#if $key#}正在搜索：{#$key#}{#else#}搜索文件{#/if#}"
+                                       required="required">
+                                <span class="input-group-btn">
+                            <button class="btn btn-default" type="submit">Go!</button>
+                          </span>
+                            </div><!-- /input-group -->
+                        </div>
+                    </div><!--col-xs-12-->
+                </div><!--row-->
+            </form>
+        </div>
+    </div>
+</header>
+<main>
+    <div class="container">
+        <table class="table table-bordered table-responsive">
+            {#if $data['list']==null #}
+            这儿似乎什么也没有...
+            {#else#}
+            <thead class='active'>
+            <tr class="active">
+                <th><input type="checkbox" id="checkall"></th>
+                <th>文件<i class='glyphicon glyphicon-chevron-down'></i></th>
+                <th>大小<i class='glyphicon glyphicon-chevron-down'></i></th>
+                <th>操作<i class='glyphicon glyphicon-chevron-down'></i></th>
+            </tr>
+            </thead>
+            <tbody>
+            {#foreach from=$data['list'] key=k item=v#}
+            <tr>
+                <th><input type="checkbox" name="item" data-path="{#$v['path']#}"></th>
+                {#if $v['isdir']==1 #}
+                <td class="info br" colspan="2">
+                    <a href="?dir={#$v['encode_path']#}" style="display: block"><i class="glyphicon glyphicon-folder-open"></i>&nbsp; {#$v['server_filename']#}</a>
+                </td>
+                <td>
+                    <div class="btn {#if $isMobile#}btn-group-vertical{#else#}btn-group{#/if#}">
+                        <button class="btn btn-default" onclick='checkTree("/admin/tree.php?base_dir={#$v.encode_path#}")'>资源树</button>
+                        <a class="btn btn-default" target="_blank" href="/admin/imglist.php?path={#$v.encode_path#}">相册</a>
+                        {#if $v['path']!='/apps'#}
+                        <button class="btn btn-default" path="{#$v['path']#}" onclick='rename(event)'>重命名</button>
+                        <button class="btn btn-danger" path="{#$v['path']#}" onclick='del(event)'>删除</button>
+                        {#/if#}
+                    </div>
+                </td>
+                {#else#}
+                <td class="br"><i class="glyphicon glyphicon-file"></i> {#$v['server_filename']#}{#if $key#} <span tip="{#$v['title']#}" class="tip fa fa-question-circle-o"></span>{#/if#}</td>
+                <td>{#$v['show_size']#}</td>
+                <td>
+                    <div class="btn {#if $isMobile#}btn-group-vertical{#else#}btn-group{#/if#}">
+                        <a class="btn btn-default" href="{#$base_url#}/dn.php?fsid={#$v['fs_id']#}">下&nbsp;&nbsp;&nbsp;载</a>
+                        <a class="btn btn-default" href="{#$base_url#}/admin/dlink.php?fsid={#$v['fs_id']#}">直链</a>
+                        <button class="btn btn-default" path="{#$v['title']#}" onclick='rename(event)'>重命名</button>
+                        <button class="btn btn-danger" path="{#$v['title']#}" onclick='del(event)'>删除</button>
+                    </div>
+                </td>
+                {#/if#}
+            </tr>
+            {#/foreach#}
+            {#/if#}
+        </table>
+    </div>
+</main>
+<footer>
+    <div class="copyright navbar navbar-default navbar-inverse">
+        <p class="text-center" style="color:#9d9d9d;margin-top:15px;">Copyright © {#$app_name#} {#$year#}</p>
+    </div>
+</footer>
+<a href="javascript:(function(){window.scrollTo(0, 0);})();" title="返回顶部" id="back-to-top"
+   style="display:none;position:fixed;{#if $isMobile#}left:20px;{#else#}right:20px;{#/if#}bottom:10px;background-color:rgb(95,99,104);box-sizing: border-box;cursor:pointer;text-align:center;"><i
+        class="fa fa-angle-up"
+        style="height:40px;width:40px;display:inline-block;line-height:40px;color:#fff;"></i></a>
+<style>
+    .copyright{
+        margin-bottom: 0px;
+    }
+    .br{
+        word-break: break-all !important;
+    }
+    .tip{
+        cursor: pointer;
+    }
+</style>
+<script src="../js/clipboard.min.js"></script>
+<script>
+    $(function () {
+        if($(window).height()==$(document).height()){
+            $(".copyright").addClass("navbar-fixed-bottom");
+        }
+        else{
+            $(".copyright").removeClass(" navbar-fixed-bottom");
+        }
+    });
+    $(window).scroll(function(){
+        let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+        if(scrollTop>50){
+            $("#back-to-top").css("display","block");
+        }else{
+            $("#back-to-top").css("display","none");
+        }
+    });
+    // 删除文件
+    function del(e){
+        let check = confirm("短期内可在百度网盘app回收站找回，请确认删除：");
+        if(check){
+            let path = $(e.target).attr("path");
+            var filelist = JSON.stringify([{"path":path}]);
+            $.post("../controller/filemanager.php?method=delete",{"filelist":filelist},function(data){
+                if(data.errno===0){
+                    message("删除成功","success");
+                    setTimeout("location.reload()",200);
+                }else{
+                    message("删除失败","error");
+                }
+            },"json")
+        }
+    }
+    // 单个文件重命名
+    function rename(e){
+        let name = prompt("请输入文件新名称");
+        if(!name){
+            message("未输入名称","error");
+            return;
+        }
+        name = name.trim();  // 前后不可有空格
+        if(name==""){
+            message("未输入名称","error");
+            return;
+        }
+        if(name.length>255){
+            message("名称不可大于255字符","error");
+            return;
+        }
+        let path = $(e.target).attr("path");
+        var filelist = JSON.stringify([{"path":path,"newname":name}]);
+        $.post("../controller/filemanager.php?method=rename",{"filelist":filelist},function(data){
+            if(data.errno===0){
+                message("重命名成功","success");
+                setTimeout("location.reload()",200);
+            }else{
+                message("重命名失败","error");
+            }
+        },"json")
+    }
+    // 是否生成目录树
+    function checkTree(url){
+        BootstrapDialog.show({
+            title: '消息',
+            message: `<p class="text-info">生成资源目录树时，如果数据太大层级太深，会自动触发保护机制。</p>`,
+            closable: true,
+            closeByBackdrop: false,
+            closeByKeyboard: false,
+            buttons: [{
+                label: "生成资源树",
+                cssClass: 'btn-primary',
+                action: function (dialogRef) {
+                    window.open(url);
+                    dialogRef.close();
+                }
+            },{
+                label: '关闭消息',
+                action: function(dialogRef){
+                    dialogRef.close();
+                }
+            }]
+        });
+    }
+    // 提示完整目录
+    $(".tip").click(function () {
+
+        BootstrapDialog.show({
+            title: '文件位置',
+            message: $(this).attr("tip"),
+            closable: true,
+            closeByBackdrop: false,
+            closeByKeyboard: false,
+            buttons: [{
+                label: '关闭消息',
+                action: function(dialogRef){
+                    dialogRef.close();
+                }
+            }]
+        });
+    });
+    // 创建文件夹
+    function mkdir(){
+        let name = prompt("请输入文件夹名称");
+        if(!name){
+            message("未输入文件夹名称","error");
+            return;
+        }
+        name = name.trim();  // 前后不可有空格
+        if(name==""){
+            message("未输入文件夹名称","error");
+            return;
+        }
+        if(name.length>255){
+            message("文件夹名称不可大于255字符","error");
+            return;
+        }
+        for(let i=0;i<name.length;i++){
+            let char = name.charAt(i);
+
+            if(char ==':' || char== '<' || char=='>' || char=='|' || char=='*' || char=='?' || char=='/'){
+                message("不能包含字符:<>|*?/","error");
+                return;
+            }
+        }
+        $.post("../controller/mkdir.php",{"name":name,"path":"{#$dir#}"},function(data){
+            if(data.errno!=0){
+                message("文件夹创建失败","error");
+            }else{
+                message("文件夹创建成功","success");
+                setTimeout("location.reload()",200);
+            }
+        },"json");
+    }
+    // 全选
+    $("#checkall").click(function(){
+        $(":checkbox[name=item]").prop("checked",this.checked);
+    });
+    // 批量重命名
+    $("#rename").click(function () {
+        let paths = $(":checkbox[name=item]:checked");
+        if(paths.length <= 0){
+            message("未选择文件","error");
+            return;
+        }
+        let newname = prompt("请输入文件新名称，注：重命名成功不可撤销！");
+        if(!newname){
+            message("未输入名称","error");
+            return;
+        }
+        newname = newname.trim();  // 前后不可有空格
+        if(newname==""){
+            message("未输入名称","error");
+            return;
+        }
+        if(newname.length>255){
+            message("名称不可大于255字符","error");
+            return;
+        }
+        let filelist = [];
+        for(let i=0; i< paths.length; i++){
+            let path_i = $(paths[i]).data("path");
+            let filelist_i = {"path":path_i,"newname":newname};
+            filelist[i] = filelist_i;
+        }
+        let str_filelist = JSON.stringify(filelist);
+        $.post("../controller/filemanager.php?method=rename",{"filelist":str_filelist},function(data){
+            if(data.errno===0){
+                message("批量重命名成功","success");
+                setTimeout("location.reload()",200);
+            }else{
+                message("批量重命名失败","error");
+            }
+        },"json")
+    });
+    // 批量删除
+    $("#delete").click(function () {
+        let paths = $(":checkbox[name=item]:checked");
+        if(paths.length <= 0){
+            message("未选择文件","error");
+            return;
+        }
+        let check = confirm("确定要批量删除吗？");
+        if(!check){
+            message("批量删除取消","info");
+            return;
+        }
+        let filelist = [];
+        for(let i=0; i< paths.length; i++){
+            let path_i = $(paths[i]).data("path");
+            filelist[i] = path_i;
+        }
+        let str_filelist = JSON.stringify(filelist);
+        $.post("../controller/filemanager.php?method=delete",{"filelist":str_filelist},function(data){
+            if(data.errno===0){
+                message("批量删除成功","success");
+                setTimeout("location.reload()",200);
+            }else{
+                message("批量删除失败","error");
+            }
+        },"json")
+    });
+
+</script>
+</body>
+</html>

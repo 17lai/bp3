@@ -37,12 +37,13 @@
     // 提取目录
     $dir_arr = [];  // 这个数组，存储所有目录
 
-    $dir_arr[$base_dir] = ['name'=>$lastPath,'deep'=>1,'size'=>0];  // 根目录，深度为 1
+    $base_dir_info = ['name'=>$lastPath,'deep'=>1,'size'=>0];
+    $dir_arr[$base_dir] = $base_dir_info;  // 根目录，深度为 1， 遍历总列表
+    $activeData = array();  // 动态库
+    $activeData[1][$base_dir] = $base_dir_info;
 
-    $count_dir = 0;
     foreach ($arr['list'] as $row){
         if($row['isdir']){
-            $count_dir++;
             // 生成子目录info
             $deep = count(explode("/",$row['path']))-$base_dir_count+1;  // 计算子目录层级数，深度动态计算得到
 
@@ -50,11 +51,12 @@
                 $is_beyond_deep = true;
                 continue;
             }
-            if($count_dir)
 
             $dir_info = ['name'=>$row['server_filename'],'deep'=>$deep,'size'=>0,'parent'=>0];
             
             $dir_arr[$row['path']] = $dir_info;
+
+            $activeData[$deep][$row['path']] = $dir_info;
         }
     }
     // 前面得到的数据，没有层级关系，现在开始为每个目录寻找父目录，并记录最大层次
@@ -74,14 +76,7 @@
         // 3层以上的父目录，需要手动寻找上一层
         else{
             // 遍历找出上一层的所有目录
-            $before = $value['deep']-1;
-            $before_arr = [];
-            foreach($dir_arr as $key2=>$value2)
-            {
-                if($value2['deep']==$before){
-                    $before_arr[$key2] = $value2;
-                }
-            }
+              $before_arr=$activeData[$value['deep']-1];
             // 遍历该目录，如果该目录中任意一个被当前包含，则说明是当前父目录
             foreach($before_arr as $key3=>$value3)
             {
@@ -90,42 +85,46 @@
                 }
             }
         }
+        // 修正activeData
+        $activeData[$value['deep']][$key]['parent'] = $dir_arr[$key]['parent'];
     }
 
-    // 前面得到了层级关系，但是数组本身没有结构关系，现在开始重新排序目录
+    // 开始给目录，按递归方式排序
     $dir_sort = [];
-
+    // 根层
     $dir_sort[$base_dir] = $dir_arr[$base_dir];
-
-    foreach($dir_arr as $key=>$value)
-    {
-        //从第2层开始，如果有子目录，并找到其子目录
-        $start_loop = 2;
-        if($value['deep']==$start_loop){
-
-            // 把第2层加入
-            $dir_sort[$key] = $dir_arr[$key];
-            autoCeil($dir_arr,$start_loop,$key,$dir_sort,$max_dir);
+    // 第二层开始，递归排序
+    $start_loop = 2;
+    $arrForDeep = $activeData[$start_loop];
+    if(!empty($arrForDeep)){
+        foreach ($arrForDeep as $k=>$v){
+            $dir_sort[$k] = $v;  // 添加到 sort 中
+            newSort($start_loop+1,$k,$dir_sort,$max_dir);
         }
     }
 
-// 递归添加层数
-    function autoCeil(& $dir_arr,$start_loop,$key,& $dir_sort,$max_dir){
+
+    // 新排序算法，递归添加层数
+    function newSort($start_loop,$parent,& $dir_sort,$max_dir){
+        // 如果已遍历所有层级
         if($start_loop>$max_dir){
             return;
         }
-        foreach($dir_arr as $key2=>$value2)
-        {
-            // 查询第三层中，和当前第2层符合父子关系的目录
-            if($value2['deep']==$start_loop+1 && $key==$value2['parent']){
-                
-                $dir_sort[$key2] = $dir_arr[$key2];
-                autoCeil($dir_arr,$start_loop+1,$key2,$dir_sort,$max_dir);
+        global $activeData;
+        // 取出下一级
+        $nextArr = $activeData[$start_loop];
+        if(!empty($nextArr)){
+            foreach ($nextArr as $key => $val){
+                if($val['parent'] == $parent){
+                    $dir_sort[$key] = $val;
+                    newSort($start_loop+1,$key,$dir_sort,$max_dir);
+                }
             }
         }
     }
+
     // 目录排序完毕
-    $dir_arr = $dir_sort;
+    $dir_arr = & $dir_sort;
 
     // 给文件夹添加文件，并计算文件夹大小
     foreach ($arr['list'] as $row){

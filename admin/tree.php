@@ -17,7 +17,15 @@
     
     $url = "http://pan.baidu.com/rest/2.0/xpan/multimedia?method=listall&path=$encode_dir&access_token=$access_token&order=name&recursion=1&limit=$limit";
     
-    $result = easy_file_get_content($url);
+    $ch = curl_init($url);
+    // 通用设置
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+    $cus_header = ["User-Agent: pan.baidu.com"];
+    curl_setopt($ch,CURLOPT_HTTPHEADER,$cus_header);
+    $result = curl_exec($ch);
 
     $arr = m_decode($result);
 

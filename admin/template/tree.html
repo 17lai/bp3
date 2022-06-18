@@ -9,7 +9,7 @@
             word-break: break-all;
         }
         .h2{
-            font-size: 2em;
+            font-size: 1.5em;
             font-weight: bold;
             margin-top: 10px;
             margin-bottom: 20px;
@@ -17,6 +17,7 @@
         .h4{
             margin-top: 10px;
             margin-bottom: 10px;
+            font-weight: bold;
         }
         body{
             white-space: nowrap;
@@ -26,8 +27,9 @@
 <body>
 <p>本次记录数：{#$record#}，
     {#if $has_more#}<span style="color: red">本次加载还有更多数据</span>{#else#}<span style="color: green">已全部加载</span>{#/if#}
-    ，最深层级：{#$max_dir#}{#if $is_beyond_deep#}， <span style="color: red">实际层级太深，部分数据被丢弃</span>{#/if#}</p>
+    ，最深层级：{#$max_dir#}{#if $is_beyond_deep#}， <span style="color: red">实际层级太深，部分数据被丢弃</span>{#/if#}，<button onclick="saveFile()">导出txt文本</button></p>
     <hr>
+    <div id="tree">
     <p class="h2">资源生成树展示：{#$lastPath#} [ {#$all_size|height_show_size#} ]</p>
     {#foreach from=$data key=k item=v#}
         {#if $k==$base_dir#}
@@ -46,5 +48,21 @@
         {#/if#}
     {#/foreach#}
     <br>
+    </div>
+    <script>
+        function saveFile() {
+            let data = document.getElementById("tree").innerText;
+            let fileName = "{#$lastPath#}.txt";
+            exportRaw(data,fileName);
+        }
+        function exportRaw(data, name) {
+            let urlObject = window.URL || window.webkitURL || window;
+            let export_blob = new Blob([data]);
+            let save_link = document.createElementNS("http://www.w3.org/1999/xhtml", "a")
+            save_link.href = urlObject.createObjectURL(export_blob);
+            save_link.download = name;
+            save_link.click();
+        }
+    </script>
 </body>
 </html>

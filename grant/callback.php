@@ -30,7 +30,12 @@
         $str_identify = json_encode($identify);
         $encode_result = urlencode($str_identify); // 字符串转码得到参数
         // 重定向并携带参数
-        $redirect_with_param = $display.'?param='.$encode_result;
+        $is_param = strpos($display,"?");
+        if($is_param){
+            $redirect_with_param = $display.'&param='.$encode_result;
+        }else{
+            $redirect_with_param = $display.'?param='.$encode_result;
+        }
         redirect($redirect_with_param);
     }
 

@@ -531,7 +531,7 @@ print(resp.read().decode())</code></pre>
             try{
                 r = JSON.parse(r);
                 let version = '{#$config['version']#}';
-                if(version > r.tag_name){
+                if(version < r.tag_name){
                     let body = r.body.replace(/\r\n/g,"<br>");
                     let msg = `<p class="text-success">新版本：${r.tag_name}</p><hr>`;
                     msg += body;

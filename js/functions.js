@@ -62,3 +62,14 @@
         }
         setTimeout("location.href='"+href+"'", time );
     }
+
+    /**
+     * 判断手机端
+     */
+    function isMobile() {
+        if (/(iPhone|iPad|iPod|iOS|Android)/i.test(navigator.userAgent)) {
+            return true;
+        }else {
+            return false;
+        };
+    }

@@ -12,9 +12,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="{#$base_url|cat:'/css/bootstrap.min.css'#}" rel="stylesheet">
     <link href="{#$base_url|cat:'/css/bootstrap-dialog.min.css'#}" rel="stylesheet">
+    <link href="{#$base_url|cat:'/css/general.css'#}" rel="stylesheet">
     <script src="{#$base_url|cat:'/js/jquery.min.js'#}"></script>
     <script src="{#$base_url|cat:'/js/bootstrap.min.js'#}"></script>
-    <link href="{#$base_url|cat:'/./fonts/font-awesome-4.7.0/css/font-awesome.min.css'#}" rel="stylesheet"/>
+    <link href="{#$base_url|cat:'/fonts/font-awesome-4.7.0/css/font-awesome.min.css'#}" rel="stylesheet"/>
     <script src="{#$base_url|cat:'/js/clipboard.min.js'#}"></script>
     <script src="{#$base_url|cat:'/js/functions.js'#}"></script>
     <script src="{#$base_url|cat:'/js/bootstrap-dialog.min.js'#}"></script>
@@ -22,7 +23,7 @@
 <body style="background-color:rgb(231,231,231);">
 <div id="content">
 <header>
-    <nav class="navbar navbar-default">
+    <nav class="navbar navbar-default mb-0">
         <div class="container-fluid">
             <!-- Brand and toggle get grouped for better mobile display -->
             <div class="navbar-header">
@@ -58,7 +59,7 @@
             </div><!-- /.navbar-collapse -->
         </div><!-- /.container-fluid -->
     </nav>
-    <div id="myheader" class="container-fluid">
+    <div id="myheader" class="container-fluid px-0">
         <div class="container jumbotron">
             <div class="row">
                 <p class="text-center">{#$app_name#} - {#$app_subtitle#}</p>
@@ -93,7 +94,7 @@
     </div>
 </header>
 <main>
-    <div class="container">
+    <div class="container px-0">
         <table class="table table-bordered table-responsive">
             {#if $data['list']==null #}
             这儿似乎什么也没有...

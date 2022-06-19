@@ -38,7 +38,7 @@
         }
         $url = "https://pan.baidu.com/rest/2.0/xpan/nas?access_token=$access_token&method=uinfo";
 
-        $result = easy_file_get_content($url);
+        $result = easy_curl($url);
 
         return m_decode($result);
     }
@@ -58,7 +58,7 @@
     function m_callback($code,$appKey,$secret,$redirect,$state,$grant_url,$refresh_url){
 
         $url = "https://openapi.baidu.com/oauth/2.0/token?grant_type=authorization_code&code=$code&client_id=$appKey&client_secret=$secret&redirect_uri=$redirect&state=$state";
-        $result = easy_file_get_content($url);
+        $result = easy_curl($url);
         $identify = m_decode($result);
         global $time;
         $identify['conn_time'] = $time; // 添加时间
@@ -76,7 +76,7 @@
      */
     function m_file_info(string $access_token,string $fsid){
         $url = "http://pan.baidu.com/rest/2.0/xpan/multimedia?access_token=$access_token&method=filemetas&fsids=[$fsid]&dlink=1&thumb=1&dlink=1&extra=1";
-        $result =  easy_file_get_content($url);
+        $result =  easy_curl($url);
 
         return m_decode($result);
     }
@@ -87,10 +87,8 @@
      * @return mixed|string 重定向后的下载地址
      */
     function m_redirect_dlink(string $dlink){
-        //设置默认选项
-        stream_context_get_default(easy_build_opt());
         //取得headers
-        $get_headers = get_headers($dlink, 1);
+        $get_headers = easy_curl_head($dlink);
         //取得最后一个location
         $locations = $get_headers['Location'];
         if(is_array($locations)){
@@ -111,7 +109,7 @@
      */
     function m_refresh(string $refresh_token,string $app_key,string $secret,string $grant_url,string $refresh_url){
         $url = "https://openapi.baidu.com/oauth/2.0/token?grant_type=refresh_token&refresh_token=$refresh_token&client_id=$app_key&client_secret=$secret";
-        $result =  easy_file_get_content($url);
+        $result =  easy_curl($url);
         $identify = m_decode($result);
         global $time;
         $identify['conn_time'] = $time; // 添加时间
@@ -159,7 +157,7 @@
                 // 自定义url（程序外，则请求url）
                 else{
                     $url = $refresh_url."?refresh_token=$refresh_token";
-                    $param = easy_file_get_content($url);
+                    $param = easy_curl($url);
                 }
                 $identify = m_decode($param);
                 $config['identify'] = $identify; // 更新身份信息

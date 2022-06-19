@@ -150,5 +150,43 @@
         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
         $cus_header = ["User-Agent: pan.baidu.com"];
         curl_setopt($ch,CURLOPT_HTTPHEADER,$cus_header);
-        return curl_exec($ch);
+        $result = curl_exec($ch);
+        curl_close($ch);
+        return $result;
     }
+
+    function headerHandler($curl, $headerLine) {
+        $len = strlen($headerLine);
+        // HTTP响应头是以:分隔key和value的
+        $split = explode(':', $headerLine, 2);
+        if (count($split) > 1) {
+            $key = trim($split[0]);
+            $value = trim($split[1]);
+            // 将响应头的key和value存放在全局变量里
+            $GLOBALS['G_HEADER'][$key] = $value;
+        }
+        return $len;
+    }
+    /**
+     * 使用 curl 获取 响应头
+     */
+    function easy_curl_head($url){
+        $ch = curl_init($url);
+        // 通用设置
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+        curl_setopt($ch, CURLOPT_NOBODY, true);  // 不要body，否则大文件会卡死
+        curl_setopt($ch, CURLOPT_HEADERFUNCTION, "headerHandler"); // 设置header处理函数
+        curl_setopt($ch, CURLINFO_HEADER_OUT, true);  // 从 PHP 5.1.3 开始可用。这个很关键，就是允许你查看请求header
+        $cus_header = ["User-Agent: pan.baidu.com"];
+        curl_setopt($ch,CURLOPT_HTTPHEADER,$cus_header);
+        curl_exec($ch);
+        $header = curl_getinfo($ch, CURLINFO_HEADER_OUT); //官方文档描述是“发送请求的字符串”，其实就是请求的header。这个就是直接查看请求header，因为上面允许查看
+        curl_close($ch);
+//        return $header;
+        return $GLOBALS['G_HEADER'];
+    }
+
+    // var_dump($GLOBALS['G_HEADER']); // 以数组形式打印响应头

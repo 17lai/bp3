@@ -184,7 +184,7 @@
             global $pre_dir;
         }
         $url = "http://pan.baidu.com/rest/2.0/xpan/file?dir=$pre_dir&access_token=$access_token&web=1&recursion=1&page=$page&num=20&method=search&key=$key";
-        $result = easy_file_get_content($url);
+        $result = easy_curl($url);
         return m_decode($result);
     }
 
@@ -197,7 +197,7 @@
         $enc_dir = urlencode($dir);
         $url = "https://pan.baidu.com/rest/2.0/xpan/file?method=list&dir=$enc_dir&order=name&start=0&limit=10000&web=web&folder=0&access_token=$access_token&desc=0";
 
-        $result = easy_file_get_content($url);
+        $result = easy_curl($url);
         return m_decode($result);
     }
 
@@ -220,6 +220,10 @@
             $msg = array(
                 "2"=>"参数错误",
                 "-6"=>"身份验证失败",
+                "-7"=>"文件或目录无权访问",
+                "-9"=>"文件或目录不存在",
+                "6"=>"不允许接入用户数据",
+                "111"=>"access token 失效",
                 "31034"=>"命中接口频控",
                 "42000"=>"访问过于频繁",
                 "42001"=>"rand校验失败",

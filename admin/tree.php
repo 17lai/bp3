@@ -16,16 +16,8 @@
     $bp3_tag->assign("base_dir",$base_dir);
     
     $url = "http://pan.baidu.com/rest/2.0/xpan/multimedia?method=listall&path=$encode_dir&access_token=$access_token&order=name&recursion=1&limit=$limit";
-    
-    $ch = curl_init($url);
-    // 通用设置
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
-    $cus_header = ["User-Agent: pan.baidu.com"];
-    curl_setopt($ch,CURLOPT_HTTPHEADER,$cus_header);
-    $result = curl_exec($ch);
+
+    $result = easy_curl($url);
 
     $arr = m_decode($result);
 

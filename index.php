@@ -1,12 +1,6 @@
 <?php
     require('./functions.php');
 
-    if($check_login){
-        $action = '管理';
-    }else{
-        $action = '登录';
-    }
-
     // 捕获dir查询参数
     $dir = isset($_GET['dir'])?$_GET['dir']: ''; // 少了前缀
     $real_dir = "";  // 真实路径
@@ -34,8 +28,6 @@
     }
     // 是否还有下一页(仅搜索接口）
     $has_more = isset($data['has_more'])?$data['has_more']:null;
-
-    $bp3_tag->assign("action",$action);
 
     $nav = array();
     if($dir!=""){ // 非根目录，一个或多个
@@ -77,7 +69,6 @@
     }
 //    easy_dump($nav);
 
-    $bp3_tag->assign("check_login",$check_login);
     $bp3_tag->assign("close_dload",$close_dload);
     $bp3_tag->assign("close_dlink",$close_dlink);
     $bp3_tag->assign("data",$data);

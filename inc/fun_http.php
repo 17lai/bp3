@@ -137,3 +137,18 @@
         return @fopen($filename,$mode,false,stream_context_create($opt));
     }
 
+    /** 通用 curl
+    * @param $url
+    * @return bool|string
+    */
+    function easy_curl($url){
+        $ch = curl_init($url);
+        // 通用设置
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, FALSE);
+        $cus_header = ["User-Agent: pan.baidu.com"];
+        curl_setopt($ch,CURLOPT_HTTPHEADER,$cus_header);
+        return curl_exec($ch);
+    }

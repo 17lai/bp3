@@ -234,6 +234,8 @@
     $bp3_tag->assign("app_description",$description);
     $bp3_tag->assign("app_keywords",$keywords);
     $bp3_tag->assign("year",$year);
+    $bp3_tag->assign("check_login",$check_login);
+
 
 
 

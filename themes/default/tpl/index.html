@@ -49,7 +49,7 @@
                     <button type="submit" class="btn btn-default">搜索</button>
                 </form>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="{#$base_url|cat:'/login.php'#}">{#$action#}<i class="fa fa-user-circle-o"
+                    <li><a href="{#$base_url|cat:'/login.php'#}">{#if $check_login#}管理{#else#}登录{#/if#}<i class="fa fa-user-circle-o"
                                                                                aria-hidden="true"></i></a></li>
                     <li><a href="{#$app_blog#}">官博<i class="fa fa-rss"></i></a></li>
                     <li><a href="{#$app_github#}">github<i class="fa fa-github" aria-hidden="true"></i></a></li>

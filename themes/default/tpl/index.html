@@ -146,7 +146,7 @@
 </div>
 
 <footer id="footer" class="copyright">
-    <div id="footerNav" class="navbar navbar-default navbar-inverse">
+    <div class="navbar navbar-default navbar-inverse">
         <p class="text-center" style="color:#9d9d9d;margin-top:15px;">Copyright © {#$app_name#} {#$year#}</p>
     </div>
 </footer>
@@ -169,9 +169,6 @@
 
     .copyright, .navbar-inverse {
         margin-bottom: 0px;
-    }
-
-    #footerNav{
         border: 0px;
     }
 
@@ -180,16 +177,18 @@
     }
 </style>
 <script>
-    let footerHeight = $("#footer").height();
-    $("#content").css("min-height",(document.documentElement.clientHeight-footerHeight)+'px');
-    var btns = document.querySelectorAll('.cp');
-    var clipboard = new ClipboardJS(btns);
-    clipboard.on('success', function (e) {
-        BootstrapDialog.alert("<p class='text-success'>链接复制成功</p>");
-    });
-    clipboard.on('error', function (e) {
-        BootstrapDialog.alert("<p class='text-danger'>链接复制失败</p>");
-    });
+    $(function () {
+        const height = $("#footer").height();
+        $("#content").css("min-height",(document.documentElement.clientHeight-height)+'px');
+        let btnS = document.querySelectorAll('.cp');
+        let clipboard = new ClipboardJS(btnS);
+        clipboard.on('success', function (e) {
+            BootstrapDialog.alert("<p class='text-success'>链接复制成功</p>");
+        });
+        clipboard.on('error', function (e) {
+            BootstrapDialog.alert("<p class='text-danger'>链接复制失败</p>");
+        });
+    })
     function toUp(){
         $('html,body').animate({scrollTop:0}, 1000)
         let search_box = $("#search");

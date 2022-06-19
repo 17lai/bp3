@@ -20,7 +20,7 @@
     <script src="{#$base_url|cat:'/js/bootstrap-dialog.min.js'#}"></script>
 </head>
 <body style="background-color:rgb(231,231,231);">
-
+<div id="content">
 <header>
     <nav class="navbar navbar-default">
         <div class="container-fluid">
@@ -91,7 +91,6 @@
             </form>
         </div>
     </div>
-    </div>
 </header>
 <main>
     <div class="container">
@@ -144,8 +143,10 @@
         </table>
     </div>
 </main>
-<footer class="copyright">
-    <div class="navbar navbar-default navbar-inverse">
+</div>
+
+<footer id="footer" class="copyright">
+    <div id="footerNav" class="navbar navbar-default navbar-inverse">
         <p class="text-center" style="color:#9d9d9d;margin-top:15px;">Copyright © {#$app_name#} {#$year#}</p>
     </div>
 </footer>
@@ -170,18 +171,17 @@
         margin-bottom: 0px;
     }
 
+    #footerNav{
+        border: 0px;
+    }
+
     .tip {
         cursor: pointer;
     }
 </style>
 <script>
-    $(function () {
-        if ($(window).height() == $(document).height()) {
-            $(".copyright").addClass("navbar-fixed-bottom");
-        } else {
-            $(".copyright").removeClass(" navbar-fixed-bottom");
-        }
-    });
+    let footerHeight = $("#footer").height();
+    $("#content").css("min-height",(document.documentElement.clientHeight-footerHeight)+'px');
     var btns = document.querySelectorAll('.cp');
     var clipboard = new ClipboardJS(btns);
     clipboard.on('success', function (e) {

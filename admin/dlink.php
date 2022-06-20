@@ -24,12 +24,13 @@
 	$client_link = $realLink."&filename=|".$file_name;
 ?>
 <!doctype html>
-<html>
+<html lang="zh-CN">
 <head>
     <meta charset="utf-8">
     <title>获取直链 | bp3</title>
     <link href="../favicon.ico" rel="shortcut icon" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="../css/general.css" rel="stylesheet">
     <link href="../css/bootstrap.min.css" rel="stylesheet">
     <script src="../js/jquery.min.js"></script>
     <script src="../js/clipboard.min.js"></script>
@@ -38,8 +39,8 @@
 
 </head>
 <body style="background-color:rgb(231,231,231);">
- 
-    <header >
+<div id="content">
+<header >
     <nav class="navbar navbar-default">
       <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
@@ -63,22 +64,20 @@
             <li><a href="./help.php">帮助与支持<i class="fa fa-question-circle" aria-hidden="true"></i></a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="../">前台<i class="fa fa-home"></i></a></li>
+            <li><a class="cursor-pointer" onclick="javascript:history.back(1)">返回<i class="fa fa-home"></i></a></li>
             <li class="<?php if(!check_session()) echo "hidden" ?>"><a href="./logout.php">注销<i class="fa fa-sign-out" aria-hidden="true"></i></i></a></li>
           </ul>
         </div><!-- /.navbar-collapse -->
       </div><!-- /.container-fluid -->
     </nav>
-  
-    </div>
     </header>
 <main>
 <div class="container help">
     <h2 class="h3">当前正在使用bp3直链功能：</h2>
     <p>当前预下载文件：<?php echo $file_name;?>，大小：<?php echo $show_size;?></p>
     <p>本次链接创建于<?php echo date("Y-m-d H:i:s");?>，以下链接8小时内有效：</p>
-    <div class="text-info">
-        点击==><button id="cbtn1">复制链接</button>
+    <div class="text-primary">
+        点击==> <button id="cbtn1">复制链接</button>
     </div>
     <?php
         if(check_session()){
@@ -91,7 +90,7 @@
     <p>IDM（<a target="_blank" href="https://wwe.lanzoul.com/ixfgPybr93e">破解版下载，仅windows</a>)、aria2、Motrix、Pure浏览器(Android)、Alook浏览器(IOS）等</p>
     <p>另外，我们提供了curl通用命令</p>
     <pre class="br">
-curl --connect-timeout 10 -C - -o "<?php echo $file_name;?>" -L -X GET "<?php echo $realLink ?>" -H "User-Agent: pan.baidu.com" 
+curl --connect-timeout 10 -C - -o "<?php echo $file_name;?>" -L -X GET "<?php echo $realLink ?>" -H "User-Agent: pan.baidu.com"
 </pre>
     <h2>bp3_client</h2>
     <p>这是bp3提供的客户端</p>
@@ -105,12 +104,14 @@ curl --connect-timeout 10 -C - -o "<?php echo $file_name;?>" -L -X GET "<?php ec
     <p><b>提示：</b>请粘贴链接到chrome地址栏上即可下载</p>
     <p><b>提示</b>：由于下载地址多次重定向且最终由http协议连接加载而导致chrome对下载地址的不信任，手动点击保存文件即可</p>
 </main>
-<footer class="navbar navbar-default navbar-fixed-bottom navbar-inverse copyright">
+</div>
+<footer id="footer" class="navbar navbar-default navbar-inverse copyright">
 <p class="text-center" style="color:#9d9d9d;margin-top:15px;">Copyright © bp3 <?php echo date('Y')?></p>
 </footer>
 <style>
     .copyright{
         margin-bottom: 0px;
+        border: 0px;
     }
     .help{
         font-size: 1.1em;
@@ -122,13 +123,9 @@ curl --connect-timeout 10 -C - -o "<?php echo $file_name;?>" -L -X GET "<?php ec
 </style>
 <script>
     $(function () {
-      if($(window).height()==$(document).height()){
-        $(".copyright").addClass("navbar-fixed-bottom");
-      }
-      else{
-        $(".copyright").removeClass(" navbar-fixed-bottom");
-      }    
-    });
+        const height = $("#footer").height();
+        $("#content").css("min-height",(document.documentElement.clientHeight-height)+'px');
+    })
         // 获取此html元素
     var clipboard1 = new ClipboardJS('#cbtn1', {
         text: function() {
@@ -150,7 +147,7 @@ curl --connect-timeout 10 -C - -o "<?php echo $file_name;?>" -L -X GET "<?php ec
         _that.addClass("activePre");
         var copyBtn = _that.find('.copyBtn');
         if (!copyBtn || copyBtn.length <= 0) {
-            var copyBtn = '<span class="copyBtn" style="position:absolute;top:2px;right:2px;z-index:999;padding:2px;font-size:13px;color:black;background-color: blue;cursor: pointer;" onclick="copyCode()">Copy</span>';
+            var copyBtn = '<span class="copyBtn" style="position:absolute;top:2px;right:2px;z-index:999;padding:2px;font-size:13px;color:black;background-color: yellow;cursor: pointer;" onclick="copyCode()">Copy</span>';
             _that.append(copyBtn);
         }
     }).mouseleave(function (e) {

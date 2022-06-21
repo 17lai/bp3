@@ -160,8 +160,12 @@
                     $param = easy_curl($url);
                 }
                 $identify = m_decode($param);
-                $config['identify'] = $identify; // 更新身份信息
-                save_config();  // 保存
+                if($identify['access_token']){  // 刷新token时，正常应该会得到access_token，得不到则不正常
+                    $config['identify'] = $identify; // 更新身份信息
+                    save_config();  // 保存
+                }else{
+                    build_err($identify,false);  // 输出报错，但不终止脚本
+                }
             }
             return $config['identify']['access_token'];
         }else{

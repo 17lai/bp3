@@ -25,14 +25,22 @@
     // 比较用户id
     if($config['account']['uk'] == $basic['uk']){
         // 登录成功
-        $_SESSION[$user] = $basic['baidu_name'];
-        
-        // 判断是否需要重置
-        if($lock != $chance){
-            $config['user']['chance']=$lock;
+        $_SESSION[$user] = $config['user']['name'];
+        // 是否需要重置锁定次数
+        $is_save = false;
+        if($config['user']['chance'] != $config['user']['lock']){
+            $config['user']['chance'] = $config['user']['lock'];
+            $is_save = true;
+        }
+        // 如果绑定的用户，是当前用户，则存储最新的identify信息，相当于重新授权
+        if($config['basic']['uk'] == $basic['uk']){
+            $config['identify'] = $identify;
+            $is_save = true;
+        }
+        // 是否需要更新文件
+        if($is_save){
             save_config();
         }
-        
         // 重定向
         redirect($login_url);
         

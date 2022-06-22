@@ -84,7 +84,7 @@
                             <div class="input-group">
                                 <input type="text" name="s" class="form-control"
                                        placeholder="{#if $key#}正在搜索：{#$key#}{#else#}搜索文件{#/if#}"
-                                       required="required">
+                                       required="required" onkeyup="this.value=this.value.replace(/[ ]/g,'')">
                                 <span class="input-group-btn">
                             <button class="btn btn-default" type="submit">Go!</button>
                           </span>

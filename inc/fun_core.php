@@ -651,11 +651,10 @@
             $bp3_tag->assign("config",$config);
             $bp3_tag->assign("base",$base);
             $bp3_tag->force_compile = true; // 默认不缓存
-            $real_tpl = BP3_TEMPLATE_DIR.$tpl;
-            if(isAdmin){
-                $real_tpl = BP3_ROOT.'/admin/template/'.$tpl;
-            }
-            if($tpl!="" && file_exists($real_tpl)){
+            if($tpl!="" && file_exists(BP3_TEMPLATE_DIR.$tpl)){  // 尝试获取当前主题模板
+                $bp3_tag->display($tpl);
+            }elseif($tpl!="" && file_exists(BP3_TEMPLATE_DIR_DEFAULT.$tpl)){  // 尝试获取模板主题模板
+                $bp3_tag->setTemplateDir(BP3_TEMPLATE_DIR_DEFAULT);
                 $bp3_tag->display($tpl);
             }
         } catch (SmartyException $e) {

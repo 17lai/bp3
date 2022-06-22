@@ -62,6 +62,9 @@
     // 目录url
     $dir_url = get_dir_url();
 
+    // 获取当前页面、到根目录的前缀
+    define("CONTENT_PATH",substr($dir_url,strlen($base_url)));
+
     // 页面url
     $page_url = get_page_url();
 

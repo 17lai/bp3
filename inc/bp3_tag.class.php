@@ -18,12 +18,12 @@ class bp3_tag extends Smarty {
         $this->right_delimiter = "#}"; // 终止标记
         $this->caching = Smarty::CACHING_LIFETIME_CURRENT;
 
-        define("BP3_TEMPLATE_DIR_DEFAULT",BP3_ROOT.'/themes/default/tpl'.CONTENT_PATH.'/');  // 默认主题模板目录
-        define("BP3_TEMPLATE_DIR",BP3_ROOT.'/themes/'.THEME.'/tpl'.CONTENT_PATH.'/');  // 当前主题模板目录
+        define("BP3_TEMPLATE_DIR_DEFAULT",BP3_ROOT.'/themes/default'.CONTENT_PATH.'/');  // 默认主题模板目录
+        define("BP3_TEMPLATE_DIR",BP3_ROOT.'/themes/'.THEME.''.CONTENT_PATH.'/');  // 当前主题模板目录
         $this->setTemplateDir(BP3_TEMPLATE_DIR);
-        $this->setCompileDir(BP3_TAG_TEMP.'/templates_c/');
-        $this->setConfigDir(BP3_TAG_TEMP.'/configs/');
-        $this->setCacheDir(BP3_TAG_TEMP.'/cache/');
+        $this->setCompileDir(BP3_TAG_TEMP.'/tag_templates_c/');
+        $this->setConfigDir(BP3_TAG_TEMP.'/tag_configs/');
+        $this->setCacheDir(BP3_TAG_TEMP.'/tag_cache/');
 
     }
 

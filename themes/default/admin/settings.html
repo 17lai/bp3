@@ -14,7 +14,7 @@
     <script src="/js/functions.js"></script>
 </head>
 <body style="background-color:rgb(231,231,231);">
-
+<div id="content">
 <header>
     <nav class="navbar navbar-default">
         <div class="container-fluid">
@@ -47,8 +47,6 @@
             </div><!-- /.navbar-collapse -->
         </div><!-- /.container-fluid -->
     </nav>
-
-    </div>
 </header>
 <main>
     <div class="container">
@@ -354,7 +352,8 @@
         </form>
     </div>
 </main>
-<footer class="navbar navbar-default navbar-inverse copyright">
+</div>
+<footer id="footer" class="navbar navbar-default navbar-inverse copyright">
     <p class="text-center" style="color:#9d9d9d;margin-top:15px;">Copyright © bp3 {#$year#}</p>
 </footer>
 <style>
@@ -383,11 +382,8 @@
 </style>
 <script>
     $(function () {
-        if ($(window).height() == $(document).height()) {
-            $(".copyright").addClass("navbar-fixed-bottom");
-        } else {
-            $(".copyright").removeClass(" navbar-fixed-bottom");
-        }
+        const height = $("#footer").height();
+        $("#content").css("min-height",(document.documentElement.clientHeight-height)+'px');
         show_grant_url();
         show_update_url();
     });

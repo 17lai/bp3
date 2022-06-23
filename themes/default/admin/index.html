@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="/css/bootstrap-dialog.min.css" rel="stylesheet">
+    <link href="/css/general.css" rel="stylesheet">
     <script src="/js/jquery.min.js"></script>
     <script src="/js/bootstrap.min.js"></script>
     <link href="/fonts/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
@@ -14,7 +15,7 @@
     <script src="/js/bootstrap-dialog.min.js"></script>
 </head>
 <body style="background-color:rgb(231,231,231);">
-
+<div id="content">
 <header >
     <nav class="navbar navbar-default">
         <div class="container-fluid">
@@ -45,8 +46,6 @@
             </div><!-- /.navbar-collapse -->
         </div><!-- /.container-fluid -->
     </nav>
-
-    </div>
 </header>
 <main  >
     <div class="container">
@@ -115,7 +114,7 @@
         </div><!-- table-example -->
         <div class="row">
             <div class="col-xs-12">
-                <h2>绑定登录账户 <a class="pointer" onclick="copy_basic()">复制</a> <a class="pointer" onclick="bind()" url="{#$bind_account_grant_url#}">绑定</a></h2>
+                <h2>绑定登录账户 <a class="cursor-pointer" onclick="copy_basic()">复制</a> <a class="cursor-pointer" onclick="bind()" url="{#$bind_account_grant_url#}">绑定</a></h2>
                 <p>为了系统安全，bp3账户如果连续错误3次（默认）将会被锁定，此时只能ftp编辑配置信息恢复</p>
                 <p>推荐您绑定一个百度登录账户，bp3账户被封禁时可使用此账户解锁，也可用于直接登录</p>
             </div>
@@ -158,32 +157,20 @@
         <p>退出时，请注销！！！</p>
     </div>
 </main>
-<footer class="footer" style="background-color:black">
+</div>
+<footer id="footer" class="footer" style="background-color:black">
     <div class="container">
         <p class="text-center" style="color:#9d9d9d;margin-top:15px;">Copyright © bp3 {#$year#}</p>
     </div>
 </footer>
 <style>
     .manager{background-color:#e7e7e7;}
-    html {
-        position: relative;
-        min-height: 100%;
-    }
-    body {
-        margin-bottom: 50px; /* Margin bottom by footer height */
-    }
-    .footer {
-        position: absolute;
-        bottom: 0;
-        width: 100%;
-        height: 50px; /* Set the fixed height of the footer here */
-        background-color: #f5f5f5;
-    }
-    .pointer{
-        cursor: pointer;
-    }
 </style>
 <script>
+    $(function () {
+        const height = $("#footer").height();
+        $("#content").css("min-height",(document.documentElement.clientHeight-height)+'px');
+    })
     function copy_basic(){
         BootstrapDialog.show({
             title: "消息",

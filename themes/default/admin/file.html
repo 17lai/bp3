@@ -15,7 +15,7 @@
     <!--<script src="../js/spark-md5.js"></script>-->
 </head>
 <body style="background-color:rgb(231,231,231);">
-
+<div id="content">
 <header >
     <nav class="navbar navbar-default">
         <div class="container-fluid">
@@ -146,7 +146,8 @@
         </table>
     </div>
 </main>
-<footer>
+</div>
+<footer id="footer">
     <div class="copyright navbar navbar-default navbar-inverse">
         <p class="text-center" style="color:#9d9d9d;margin-top:15px;">Copyright © {#$app_name#} {#$year#}</p>
     </div>
@@ -169,13 +170,9 @@
 <script src="../js/clipboard.min.js"></script>
 <script>
     $(function () {
-        if($(window).height()==$(document).height()){
-            $(".copyright").addClass("navbar-fixed-bottom");
-        }
-        else{
-            $(".copyright").removeClass(" navbar-fixed-bottom");
-        }
-    });
+        const height = $("#footer").height();
+        $("#content").css("min-height",(document.documentElement.clientHeight-height)+'px');
+    })
     $(window).scroll(function(){
         let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
         if(scrollTop>50){

@@ -4,26 +4,47 @@
     force_login();  // 强制登录
 
     $base_dir = force_get_param("base_dir");
-    // 一次至多查找10000条
+    // 单次查找10000条
     $limit = 10000;
 
     // 最大目录层级3层（仅在数据量超过限定数量时，此限制生效，如果数量在可控范围内则无效）
     $limit_deep = 3;
 
     $is_beyond_deep = false;
-    
+
     $encode_dir = urlencode($base_dir);
     $bp3_tag->assign("base_dir",$base_dir);
-    
-    $url = "http://pan.baidu.com/rest/2.0/xpan/multimedia?method=listall&path=$encode_dir&access_token=$access_token&order=name&recursion=1&limit=$limit";
+    $has_more = true;
+    $page = (int)($_SESSION['tree']['page'])+1;  // 如果进行到一半触发品控，则接着下一页，默认第一页
 
-    $result = easy_curl($url);
+    while ($has_more){
 
-    $arr = m_decode($result);
+        $start = ($page-1) * $limit;  // 起始位置
+        $url = "http://pan.baidu.com/rest/2.0/xpan/multimedia?method=listall&path=$encode_dir&access_token=$access_token&order=name&recursion=1&limit=$limit&start=$start";
+        $result = easy_curl($url);
+        // 缓存数据
+        $arr = m_decode($result);
+        $_SESSION['tree'][$page] =  $arr;
+        $_SESSION['tree']['page'] = $page;
+        // 是否还有数据
+        $has_more = (bool)$arr['has_more'];
+        if($has_more){
+            $page ++ ;
+        }
+        // 最多支持循环几次？
+        if($page>3){  // 支持 n * limit 条，推荐为 3w 条，数据过大会超过 php 默认的 128m 内存
+            break;
+        }
+    }
+    // 拼接数据
+    $arr = & $_SESSION['tree'][1]['list'];
+    for($i=2; $i<=$_SESSION['tree']['page']; $i++){
+        $arr = array_merge($_SESSION['tree'][$i]['list'],$arr);
+    }
+    // 删除缓存
+    $_SESSION['tree'] = null;
 
-
-    $record = count($arr['list']);
-    $has_more = (bool)$arr['has_more'];
+    $record = count($arr);
     $bp3_tag->assign("record",$record);  // 取得的记录数
     $bp3_tag->assign("has_more",$has_more);  // 取得的记录数
 
@@ -42,7 +63,7 @@
     $activeData = array();  // 动态库
     $activeData[1][$base_dir] = $base_dir_info;
 
-    foreach ($arr['list'] as $row){
+    foreach ($arr as $row){
         if($row['isdir']){
             // 生成子目录info
             $deep = count(explode("/",$row['path']))-$base_dir_count+1;  // 计算子目录层级数，深度动态计算得到
@@ -127,7 +148,7 @@
     $dir_arr = & $dir_sort;
 
     // 给文件夹添加文件，并计算文件夹大小
-    foreach ($arr['list'] as $row){
+    foreach ($arr as $row){
         
         if(!$row['isdir']){
             $deep = count(explode("/",$row['path']))-$base_dir_count+1;  // 计算子目录层级数，深度动态计算得到

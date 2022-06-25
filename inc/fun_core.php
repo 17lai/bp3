@@ -10,7 +10,7 @@
      * @return string $h_str 高可用大小字符串
      */
     function height_show_size($byte){
-        $byte = (int)$byte;
+        $byte = (double)$byte;
         $h_str = '';
         if($byte<1024){
             $h_str = $byte.'B';
@@ -23,6 +23,15 @@
         }elseif($byte<1099511627776){
             $num=$byte/1073741824;
             $h_str = number_format($num,2)."GB";
+        }elseif($byte<1125899906842624){
+            $num = $byte/1099511627776;
+            $h_str = number_format($num,2)."TB";
+        }elseif($byte<1152921504606846976){
+            $num = $byte/1125899906842624;
+            $h_str = number_format($num,2)."PB";
+        }else{  // 最大，计算为 EB ，已知 php int 类型最大为 8.00 EB
+            $num = $byte/1152921504606846976;
+            $h_str = number_format($num,2)."EB";
         }
         return $h_str;
     }

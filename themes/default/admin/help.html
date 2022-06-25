@@ -360,7 +360,7 @@ print(resp.read().decode())</code></pre>
                     // 请求ajax
                     $.get("./refresh_token.php",function (r) {
                         if(r.errno){
-                            dialogRef.getModalBody().html(`<p class='text-danger'>${r.errmsg}</p>`);
+                            dialogRef.getModalBody().html(`<p class='text-danger'>${r.error_description}</p>`);
                         }else{
                             token = r.errmsg;
                             dialogRef.getModalBody().find("#token").val(r.errmsg);

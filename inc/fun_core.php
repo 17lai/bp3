@@ -758,3 +758,41 @@
         }
         fclose($handle);
     }
+
+    /** 43
+     * 生成随机密码
+     * @param int $length
+     * @return string
+     */
+    function rand_pwd(int $length=8){
+        $charHouse = "abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ123456789";
+        $arr = str_split($charHouse);  // 分割字符串
+        $rand_arr = array_rand($arr,$length);  // 获取随机键名
+        $pwd = "";
+        foreach ($rand_arr as $i){
+            $pwd .= $arr[$i];
+        }
+        return $pwd;
+    }
+
+    /** 44
+     * 发送邮件
+     * @param $subject -- 邮件主题， text
+     * @param $body  -- 邮件内容， html
+     * @return bool
+     */
+    function send_mail($subject,$body){
+        // 检测配置
+        global $config;
+        $mailConfig = $config['mail'];
+        if(empty($mailConfig) || empty($mailConfig['user']) || empty($mailConfig['pass']) || empty($mailConfig['server']) || empty($mailConfig['port']) || empty($mailConfig['receiver'])){
+            return false;
+        }else{
+            // 引入邮件类
+            include_once(BP3_ROOT."/inc/mail.class.php");
+            // 创建实例
+            $mail = new mail($mailConfig);
+            // 发送邮件
+            return $mail->send($subject,$body);
+        }
+    }

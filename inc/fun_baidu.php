@@ -164,6 +164,22 @@
                     $config['identify'] = $identify; // 更新身份信息
                     save_config();  // 保存
                 }else{
+                    // 消息处理
+                    // 如果开启了邮件提醒
+                    if(is_array($config['mail']) && $config['mail']['refresh']=="1"){
+                        $file_log = TEMP_DIR."/refresh.log";
+                        if(date('Y-m-d',filemtime($file_log)) != date('Y-m-d')){  // 文件不是今日修改
+                            // 今日首次发送
+                            global $base_url;
+                            $is_email = send_mail("token刷新失败通知","您的站点：<b>{$config['site']['title']}</a>，token自动刷新失效，请及时处理并排查原因，站点地址：<a href='$base_url'>$base_url</a>，如不需要此提醒，请在后台设置中关闭。");
+                            if($is_email){
+                                file_put_contents($file_log,"邮件发送成功：".date("Y-m-d h:i:s"));
+                            }else{
+                                file_put_contents($file_log,"邮件发送失败：".date("Y-m-d h:i:s"));
+                            }
+                        }
+                    }
+                    // 返回错误
                     build_err($identify,false);  // 输出报错，但不终止脚本
                 }
             }
@@ -187,7 +203,15 @@
         }
         $url = "http://pan.baidu.com/rest/2.0/xpan/file?dir=$pre_dir&access_token=$access_token&web=1&recursion=1&page=$page&num=20&method=search&key=$key";
         $result = easy_curl($url);
-        return m_decode($result);
+        ob_start();
+        $data = m_decode($result,true,false);
+        $msg = ob_get_contents();
+        ob_end_clean();
+        if($msg){
+            return array('list'=>array());
+        }else{
+            return $data;
+        }
     }
 
     /** 9 列出文件
@@ -200,16 +224,25 @@
         $url = "https://pan.baidu.com/rest/2.0/xpan/file?method=list&dir=$enc_dir&order=name&start=0&limit=10000&web=web&folder=0&access_token=$access_token&desc=0";
 
         $result = easy_curl($url);
-        return m_decode($result);
+        ob_start();
+        $data = m_decode($result,true,false);
+        $msg = ob_get_contents();
+        ob_end_clean();
+        if($msg){
+            return array('list'=>array());
+        }else{
+            return $data;
+        }
     }
 
     /** 10
      * 辅助函数，检测并解析响应数据，所有业务请求均应使用此函数
      * @param string $str
      * @param bool $to_arr
+     * @param bool $die
      * @return false|string
      */
-    function m_decode(string $str,bool $to_arr=true){
+    function m_decode(string $str,bool $to_arr=true,bool $die=true){
         $arr = json_decode($str,true);
         if(empty($arr['errno'])){
             if($to_arr){
@@ -241,7 +274,7 @@
                     $arr['zh-CN'] = $v;
                 }
             }
-            build_err($arr); // 输出增强后的响应信息
+            build_err($arr,$die); // 输出增强后的响应信息
         }
     }
 

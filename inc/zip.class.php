@@ -19,7 +19,7 @@ class ExtendedZip extends ZipArchive {
     }
 
     // 默认排除项
-    protected array $skips = ['.user.ini', '.git', '.idea', '.gitattributes','.gitignore', 'temp','test.php'];
+    protected $skips = ['.user.ini', '.git', '.idea', '.gitattributes','.gitignore', 'temp','test.php'];
 
     // 对某些文件名排除
     protected function addSkip(array $skips=array()){

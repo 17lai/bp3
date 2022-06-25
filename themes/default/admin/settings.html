@@ -346,6 +346,65 @@
                             </select>
                         </td>
                     </tr>
+                    <tr>
+                        <th scope="row">28</th>
+                        <td>smtp邮箱 <span class="tip fa fa-question-circle-o" tip="用户发送邮件的邮箱"></span></td>
+                        <td>{#$config.mail.user#}</td>
+                        <td>
+                            <input type="email" name="s28" class="form-control" placeholder="发送人邮箱" value="{#$config.mail.user#}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">29</th>
+                        <td>smtp密钥 <span class="tip fa fa-question-circle-o" tip="用户发送邮件的密钥"></span></td>
+                        <td><input type="password" readonly class="form-control" value="{#$config.mail.pass#}"></td>
+                        <td>
+                            <div class="input-group">
+                                <input type="password" name="s29" value="{#$config.mail.pass#}" class="form-control" placeholder="发送人密钥"/>
+                                <div class="input-group-btn">
+                                    <button type="button" class="btn btn-default" title="显示密码" onclick="seePwd(this)"
+                                            aria-label="Help"><span class="fa fa-eye"></span></button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">30</th>
+                        <td>smtp服务器 <span class="tip fa fa-question-circle-o" tip="smtp服务器"></span></td>
+                        <td>{#$config.mail.server#}</td>
+                        <td>
+                            <input type="text" name="s30" class="form-control" placeholder="smtp服务器域名" value="{#$config.mail.server#}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">31</th>
+                        <td>smtp端口 <span class="tip fa fa-question-circle-o" tip="用于发送邮件的端口，请使用加密端口"></span></td>
+                        <td>{#$config.mail.port#}</td>
+                        <td>
+                            <input type="number" min="0" name="s31" class="form-control" placeholder="邮箱发送端口" value="{#$config.mail.port#}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">32</th>
+                        <td>收件人邮箱 <span class="tip fa fa-question-circle-o" tip="通知接收邮箱"></span></td>
+                        <td>{#$config.mail.receiver#}</td>
+                        <td>
+                            <input type="email" name="s32" class="form-control" placeholder="系统管理员邮箱" value="{#$config.mail.receiver#}">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">33</th>
+                        <td>token刷新失效邮件 <span class="tip fa fa-question-circle-o" tip="如果配置了完整的邮件信息，并且打开了此设置，则发送通知邮件<br>如需测试邮件配置是否正确，请点击<button class='btn btn-primary' onclick='testMail()'>这里</button>进行测试"></span></td>
+                        <td></td>
+                        <td>
+                            <label class="radio-inline">
+                                <input {#if $config.mail.refresh#}checked{#/if#} type="radio" name="s33" value="1"> 打开
+                            </label>
+                            <label class="radio-inline">
+                                <input {#if !$config.mail.refresh#}checked{#/if#} type="radio" name="s33" value="0"> 关闭
+                            </label>
+                        </td>
+                    </tr>
                     </tbody>
                 </table>
             </div>
@@ -406,6 +465,18 @@
         $(obj).parent().parent().children('input:first-child').val(pwdValue);
     }
 
+    /**
+     * 测试邮件
+     */
+    function testMail(){
+        $.get("../controller/helpapi.php?method=testMail",function (r) {
+            if(r.errno){
+                alert("邮件发送失败，请排查错误");
+            }else{
+                alert("邮件发送成功，请注意查收");
+            }
+        },"json");
+    }
     /**
      * 选择与展示grant_url
      */

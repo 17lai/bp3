@@ -121,10 +121,17 @@ elseif($method=="savesettings"){
     $config['control']['update_url'] = $_POST['s24u'];
 //    $config['control']['dn_limit'] = $_POST['s25'];
 //    $config['control']['dn_speed'] = $_POST['s26'];
-    $config['control']['theme'] = $_POST['s27'];
 //    if(!is_numeric($_POST['s26'])){
 //        $check = false;
 //    }
+    $config['control']['theme'] = $_POST['s27'];
+    $config['mail']['user'] = $_POST['s28'];  // 发送用户
+    $config['mail']['pass'] = $_POST['s29'];  // 应用密钥
+    $config['mail']['server'] = $_POST['s30'];  // 邮件服务器
+    $config['mail']['port'] = $_POST['s31'];  // 邮件端口
+    $config['mail']['receiver'] = $_POST['s32'];  // 收件人
+    $config['mail']['refresh'] = $_POST['s33'];  // 收件人
+
 
     if($check){
         save_config();
@@ -133,6 +140,15 @@ elseif($method=="savesettings"){
         build_err("请填写正确的数据格式！");
     }
 
+}
+//测试邮件是否正常
+elseif($method=="testMail"){
+    $res = send_mail("bp3系统测试邮件","这是一封测试邮件，来自您的站点：<a href='$base_url'>{$config['site']['title']}</a>");
+    if ($res){
+        build_success("邮件发送成功");
+    }else{
+        build_err("邮件发送失败");
+    }
 }
 else{
     build_err("无效method");

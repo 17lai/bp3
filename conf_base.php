@@ -1,5 +1,5 @@
 <?php return array (
-  'version'=>"v1.3.7",
+  'version'=>"v1.3.8",
   'user' => 
   array (
     'lock' => '3',

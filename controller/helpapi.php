@@ -142,6 +142,9 @@ elseif($method=="savesettings"){
     $hideDir = explode(",",$hideDir); // 转为数组
     $hideDir = array_filter($hideDir);  // 去掉空字符串
     $config['control']['hideDir'] = join(",",$hideDir);  // 重新拼接为字符串
+    //百度网页版前缀
+    $config['baidu']['listPre'] = $_POST['s36'];
+    $config['baidu']['searchPre'] = $_POST['s37'];
     // 数据校验
     if($check){
         save_config();

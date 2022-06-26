@@ -36,4 +36,8 @@
     'secret_key' => 'K0Y8zrTmHX98APHRlSqSAQl5N8rtS2kz',
     'redirect_uri' => 'oob',
    ),
+  'baidu' => array (
+    'listPre' => 'https://pan.baidu.com/disk/main?from=homeFlow#/index?category=all&path=',
+    'searchPre' => 'https://pan.baidu.com/disk/main?from=homeFlow#/index?category=all&search=',
+  ),
 );

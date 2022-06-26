@@ -15,7 +15,7 @@
     $encode_dir = urlencode($base_dir);
     $bp3_tag->assign("base_dir",$base_dir);
     $has_more = true;
-    $page = (int)($_SESSION['tree']['page'])+1;  // 如果进行到一半触发品控，则接着下一页，默认第一页
+    $page = (int)($_SESSION['tree']['page'])+1;  // 如果进行到一半触发频控，则接着下一页，默认第一页
 
     while ($has_more){
 

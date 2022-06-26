@@ -114,7 +114,7 @@
 
         <h3>账户已经锁定？</h3>
         <p>为防止暴力破解，一旦账户密码连续错误3次，将会锁定，暂需手动恢复</p>
-        <p>请ftp后，编辑根目录下的config.php文件，把 user => chance 选项设置为3</p>
+        <p>请ftp后，编辑根目录下的config.php文件，把 user => chance 选项设置为3，并刷新缓存</p>
         <p>新：可绑定百度账户，该用户可直接登录，或解锁bp3账户</p>
 
         <h3>本系统授权服务器地址？</h3>
@@ -137,7 +137,7 @@ print(resp.read().decode())</code></pre>
         <pre><code>{#$base_url|cat:'/admin/refresh_token.php'#}</code></pre>
 
         <h3>刷新缓存</h3>
-        <p>从v1.5.6版本开始，bp3加入了session缓存以加速配置文件，配置文件的读取和保存更快了。</p>
+        <p>从v1.3.6版本开始，bp3加入了session缓存以加速配置文件，配置文件的读取和保存更快了。</p>
         <p>但随之而来的问题是，如果配置文件被其他方式修改了，从session读取的文件将会带来错误，可点击 <button class="btn btn-primary" onclick="refresh_session()" style="text-indent: 0px">刷新缓存</button> 以修复。</p>
         <p>系统提供了一个外部刷新地址，例如账户被锁定，然后你去修改配置文件，但session读取的仍是原数据，这时请关闭浏览器再打开，或手动访问以下地址：</p>
         <pre><code>{#$base_url|cat:'/controller/refresh_session.php'#}</code></pre>

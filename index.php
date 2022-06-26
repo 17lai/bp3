@@ -51,7 +51,27 @@
 
     $bp3_tag->assign("key",$key);
     // 处理data
-    foreach ($data['list'] as & $row){
+    $hideFile = $config['control']['hideFile'] ?? "";
+    $hideFile = explode(",",$hideFile);
+    $hideDir = $config['control']['hideDir'] ?? "";
+    if(!empty($hideDir)){
+        $hideDir = explode(",",$hideDir);
+    }
+    foreach ($data['list'] as $k=> & $row){
+        // 隐藏文件夹列表
+        if(!empty($hideDir)){
+            $flag = false;
+            foreach ($hideDir as $val){
+                if(strpos($row['path'], $val) !== false){
+                    $flag = true;
+                    break;
+                }
+            }
+            if($flag){
+                unset($data['list'][$k]);
+                continue;
+            }
+        }
         if($row['isdir']==1){
             // 去掉前缀
             $path = substr($row['path'],strlen($pre_dir));
@@ -61,6 +81,11 @@
             $row['path'] =  $path;
             $row['encode_path'] =  $encode_path;
         }else{
+            // 隐藏文件列表
+            if(!empty($hideFile) && in_array($row['fs_id'],$hideFile)){
+                unset($data['list'][$k]);
+                continue;
+            }
             // 显示大小
             $row['show_size'] = height_show_size($row['size']);
             // 去掉前缀的title

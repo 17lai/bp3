@@ -116,7 +116,7 @@
                 <th><input type="checkbox" name="item" data-path="{#$v['path']#}"></th>
                 {#if $v['isdir']==1 #}
                 <td class="info br" colspan="2">
-                    <a href="?dir={#$v['encode_path']#}" style="display: block"><i class="glyphicon glyphicon-folder-open"></i>&nbsp; {#$v['server_filename']#}</a>
+                    <a href="?dir={#$v['encode_path']#}" title="{#$v['path']#}" style="display: block"><i class="glyphicon glyphicon-folder-open"></i>&nbsp; {#$v['server_filename']#}</a>
                 </td>
                 <td>
                     <div class="btn {#if $isMobile#}btn-group-vertical{#else#}btn-group{#/if#}">

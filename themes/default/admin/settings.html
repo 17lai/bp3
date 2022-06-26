@@ -405,6 +405,20 @@
                             </label>
                         </td>
                     </tr>
+                    <tr>
+                        <th scope="row">34</th>
+                        <td>前台隐藏文件列表 <span class="tip fa fa-question-circle-o" tip="前台要隐藏的文件列表，填写fsid，并使用,分割"></span></td>
+                        <td colspan="2">
+                            <input name="s34" class="form-control" value="{#$config.control.hideFile#}" placeholder="每个文件都存在一个fsid，多个之间用,分割"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">35</th>
+                        <td>前台隐藏文件夹列表 <span class="tip fa fa-question-circle-o" tip="前台要隐藏的文件夹列表，填写绝对路径，并使用,分割"></span></td>
+                        <td colspan="2">
+                            <input name="s35" class="form-control" value="{#$config.control.hideDir#}" placeholder="填写文件夹绝对路径，多个之间用,分割"/>
+                        </td>
+                    </tr>
                     </tbody>
                 </table>
             </div>

@@ -131,8 +131,18 @@ elseif($method=="savesettings"){
     $config['mail']['port'] = $_POST['s31'];  // 邮件端口
     $config['mail']['receiver'] = $_POST['s32'];  // 收件人
     $config['mail']['refresh'] = $_POST['s33'];  // 收件人
-
-
+    // 隐藏文件列表
+    $hideFile = str_replace("，",",",$_POST['s34']);  // 替换中文，为英文,
+    $hideFile = str_replace(" ","",$hideFile);  // 去掉所有空格
+    $hideFile = explode(",",$hideFile); // 转为数组
+    $hideFile = array_filter($hideFile);  // 去掉空字符串
+    $config['control']['hideFile'] = join(",",$hideFile);  // 重新拼接为字符串
+    // 隐藏文件夹列表
+    $hideDir = str_replace("，",",",$_POST['s35']);  // 替换中文，为英文,
+    $hideDir = explode(",",$hideDir); // 转为数组
+    $hideDir = array_filter($hideDir);  // 去掉空字符串
+    $config['control']['hideDir'] = join(",",$hideDir);  // 重新拼接为字符串
+    // 数据校验
     if($check){
         save_config();
         build_success();

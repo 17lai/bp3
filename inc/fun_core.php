@@ -452,7 +452,7 @@
                 }
             }
             if($redirect){
-                redirect($install_paths[0]);
+                redirect(get_base_url().$install_paths[0]);
             }
             return false;
         }

@@ -524,14 +524,15 @@
      * @param bool $die 是否停止解析，默认true
      */
     function build_err($msg=null,bool $die=true){
-        global $time;
+        $time = date("Y-m-d H:i:s");
+        $info = "error!";
         // 数组处理
         if(is_array($msg)){
             if(!isset($msg['errno'])){
                 $msg['errno'] = -1;
             }
             if(!isset($msg['errmsg'])){
-                $msg['errmsg'] = "fail";
+                $msg['errmsg'] = $info;
             }
             if(!isset($msg['time'])){
                 $msg['time'] = $time;
@@ -544,7 +545,7 @@
         }
         // 默认值
         elseif(empty($msg)){
-            echo json_encode(array("errno"=>-1,"errmsg"=>"fail",'time'=>$time),JSON_UNESCAPED_UNICODE);
+            echo json_encode(array("errno"=>-1,"errmsg"=>$info,'time'=>$time),JSON_UNESCAPED_UNICODE);
         }
         if($die){
             die;

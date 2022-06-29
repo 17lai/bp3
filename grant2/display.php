@@ -2,7 +2,7 @@
 // 本页面仅用于展示获取到的信息，包含token，refresh_token等
 require_once("../functions.php");
 
-$result = $_SESSION['grant_result'];
+$result = $_SESSION['grant2_result'];
 
 if(empty($result)){
 
@@ -10,7 +10,7 @@ if(empty($result)){
 }
 ?>
 <!doctype html>
-<html>
+<html lang="zh-CN">
 <head>
     <meta charset="utf-8">
     <title><?php echo '授权结果'.' | '.$title;?></title>
@@ -19,6 +19,7 @@ if(empty($result)){
     <script src="../js/jquery.min.js"></script>
     <script src="../js/clipboard.min.js"></script>
     <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/functions.js"></script>
     <link href="../fonts/font-awesome-4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
     <style>
         td{
@@ -108,11 +109,11 @@ if(empty($result)){
     });
     // 复制成功事件
     clipboard.on('success', function(e) {
-        alert("复制成功")
+        message("复制成功","success");
     });
     // 复制失败事件
     clipboard.on('error', function(e) {
-        alert("复制失败")
+        message("复制失败","error");
     });
     $(function () {
         if($(window).height()==$(document).height()){

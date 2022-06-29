@@ -13,6 +13,16 @@
     // 引入基本函数
     require_once("inc/fun_core.php");
 
+    define("MIN_VERSION",5.6);
+
+    define("MAX_VERSION",8.2);
+
+    if(version_compare(PHP_VERSION,MIN_VERSION,"<")){
+        easy_echo("您使用的版本太低了");
+    }elseif(version_compare(PHP_VERSION,MAX_VERSION,">")){
+        easy_echo("您使用的版本太高了");
+    }
+
     // 安装检测
     $install = check_install($config_path,$install_paths);
 
@@ -238,8 +248,6 @@
     $bp3_tag->assign("app_keywords",$keywords);
     $bp3_tag->assign("year",$year);
     $bp3_tag->assign("check_login",$check_login);
-
-
 
 
 

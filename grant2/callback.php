@@ -20,7 +20,7 @@
     $identify = m_callback($code,$app_id,$secrect_key,$redirect_uri,$state,$grant2,$grant2_refresh);
 
     // 4.结果处理，存入session并重定向
-    $_SESSION['grant_result'] = $identify;
+    $_SESSION['grant2_result'] = $identify;
 
     if($_SESSION['display']=='display'){
         redirect("display.php");

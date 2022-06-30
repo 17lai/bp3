@@ -108,7 +108,7 @@
                 <th scope="row">
                     <i class="glyphicon glyphicon-folder-open"></i>
                 </th>
-                <td class="info" colspan="3"><a href="?dir={#$v['encode_path']#}" style="display:block">{#$v['server_filename']#}</a>
+                <td class="info" colspan="3"><a href="?dir={#$v['encode_path']#}" style="display:block">{#if $key#}{#$v['path']#}{#else#}{#$v['server_filename']#}{#/if#}</a>
                 </td>
                 {#else#}
                 <th scope="row">

@@ -225,6 +225,8 @@
     $enc_bind_account_url   = urlencode(get_file_url("/controller/bind_account.php"));
     // 快速绑定百度登录授权地址
     $bind_account_grant_url = "$grant_url?display=$enc_bind_account_url";
+    // 百度登录相关
+    $baidu_login_url = "$base_url/login_baidu.php";
 
     define("isAdmin",isAdmin());
 

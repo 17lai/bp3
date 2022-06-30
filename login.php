@@ -8,17 +8,11 @@
     $login_baidu_url = null;
     if($bind_baidu){
 
-        $login_controller = urlencode("$base_url/login_baidu.php");
+        $login_controller = urlencode($baidu_login_url);
 
         $login_baidu_url = "$grant_url?display=$login_controller"; // 快速登录百度地址
     }
-    // 判断免app授权系统
-    if($grant_url==$grant && !$open_grant){
-        $bp3_tag->assign("err_grant","grant");
-    }
-    elseif($grant_url==$grant2 && !$open_grant2){
-        $bp3_tag->assign("err_grant","grant2");
-    }
+
 
     $name = isset($_POST['user'])?$_POST['user']:null;
     $pwd = isset($_POST['pwd'])?$_POST['pwd']:null;

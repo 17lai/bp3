@@ -3,7 +3,9 @@
     require_once("../functions.php");
 
     if($open_grant==0){
-        force_login();
+        if($_GET['display']!=$baidu_login_url){
+            force_login();
+        }
     }
         
     // 允许携带重定向参数，参数为get，参数名display

@@ -36,7 +36,7 @@
         $config['user']['chance'] = $chance;
         save_config();
         if($chance<=0){
-            js_alert('账户已经锁定！请ftp编辑或删除配置文件，或使用百度登录');
+            js_alert('账户已经锁定！有两个办法解决。\n办法一：ftp编辑或删除config.php、并刷新缓存\n刷新缓存办法：关闭并重新打开浏览器\n办法二：使用百度账户登录');
         }
         else{
             js_alert('用户名或密码错误！');

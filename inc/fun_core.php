@@ -797,3 +797,23 @@
             return $mail->send($subject,$body);
         }
     }
+
+    /**
+     * 45
+     * 获取所有的请求头，apache下自带，在 nginx 下 php小于74版本不存在
+     */
+    if (!function_exists('getallheaders'))
+    {
+        function getallheaders()
+        {
+            $headers = [];
+            foreach ($_SERVER as $name => $value)
+            {
+                if (substr($name, 0, 5) == 'HTTP_')
+                {
+                    $headers[str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($name, 5)))))] = $value;
+                }
+            }
+            return $headers;
+        }
+    }
